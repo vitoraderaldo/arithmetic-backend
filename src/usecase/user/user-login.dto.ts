@@ -4,5 +4,7 @@ export interface UserLoginInputDto {
 }
 
 export interface UserLoginOutputDto {
-  token: string;
+  accessToken: string;
+  refreshToken: string,
+  expirensInSeconds: number
 }

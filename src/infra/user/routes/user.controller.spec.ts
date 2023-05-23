@@ -30,11 +30,16 @@ describe('UserController', () => {
   describe('Log In', () => {
     it('must log in successfully', async () => {
       const tokenResponse: UserLoginOutputDto = {
-        token: 'token-123'
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+        expirensInSeconds: 3600,
       }
       jest.spyOn(userLogsInUseCase, 'execute').mockResolvedValue(tokenResponse);
 
-      const response = await userController.login();
+      const response = await userController.login({
+        email: 'john@email.com',
+        password: 'password123',
+      });
       expect(response).toEqual(tokenResponse);
     })
    
