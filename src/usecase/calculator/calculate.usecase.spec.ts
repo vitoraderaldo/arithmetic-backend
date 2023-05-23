@@ -3,15 +3,18 @@ import { CalculateUseCase } from "./calculate.usecase";
 import { CalculatorStrategy } from "./strategy/calculator-strategy";
 import { CalculateInputDto } from "./dto/calculate.dto";
 import { OperationType } from "../../domain/calculator/operation.types";
+import { UserRepositoryInterface } from "../../domain/user/repository/user-repository.interface";
 
 describe('Calculate Use Case', () => {
 
   let calculateUseCase: CalculateUseCase;
   let calculatorStrategy: CalculatorStrategy;
+  let userRepositoryInterface: UserRepositoryInterface
   
   beforeEach(() => {
     calculatorStrategy = createMock<CalculatorStrategy>();
-    calculateUseCase = new CalculateUseCase(calculatorStrategy);
+    userRepositoryInterface = createMock<UserRepositoryInterface>();
+    calculateUseCase = new CalculateUseCase(calculatorStrategy, userRepositoryInterface);
   })
 
   afterEach(() => {
@@ -23,8 +26,9 @@ describe('Calculate Use Case', () => {
     expect(calculateUseCase).toBeDefined();
   })
 
-  it('must calculate the operation', () => {
+  it('must calculate the operation', async () => {
     const input: CalculateInputDto = {
+      identityProviderId: '123',
       operation: OperationType.ADDITION,
       arguments: [1, 2]
     }
@@ -34,7 +38,7 @@ describe('Calculate Use Case', () => {
       .spyOn(calculatorStrategy, 'calculate')
       .mockReturnValueOnce(result);
 
-    const output = calculateUseCase.execute(input);
+    const output = await calculateUseCase.execute(input);
     expect(output).toEqual({ result });
   })
 

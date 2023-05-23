@@ -1,5 +1,5 @@
 import { ConfigService } from "@nestjs/config";
-import { CognitoEnvConfig, EnvironmentConfigInterface } from "../../@shared/environment/environment-config.interface";
+import { CognitoEnvConfig, DatabaseConfig, EnvironmentConfigInterface } from "../../@shared/environment/environment-config.interface";
 
 export class NestConfigService implements EnvironmentConfigInterface {
 
@@ -9,6 +9,16 @@ export class NestConfigService implements EnvironmentConfigInterface {
     return {
       region: this.nestConfig.get('COGNITO_REGION'),
       clientId: this.nestConfig.get('COGNITO_CLIENT_ID'),
+    }
+  }
+
+  getDatabase(): DatabaseConfig {
+    return {
+      host: this.nestConfig.get('DATABASE_HOST'),
+      port: this.nestConfig.get('DATABASE_PORT'),
+      username: this.nestConfig.get('DATABASE_USERNAME'),
+      password: this.nestConfig.get('DATABASE_PASSWORD'),
+      database: this.nestConfig.get('DATABASE_NAME'),
     }
   }
   

@@ -1,29 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserLogsInUseCase } from '../../../usecase/user/user-login.case';
 import { UserController } from '../../user/routes/user.controller';
 import { CognitoIdentityProviderService } from '../../user/repository/cognito-identity-provider';
 import { IdentityProviderInterface } from '../../../domain/user/repository/identity-provider.interface';
-import { NestConfigService } from '../../environment/nest-config.service';
 import { EnvironmentConfigInterface } from '../../../@shared/environment/environment-config.interface';
 import { CalculatorController } from '../../calculator/routes/calculator.controller';
 import { CalculatorStrategy } from '../../../usecase/calculator/strategy/calculator-strategy';
 import { CalculateUseCase } from '../../../usecase/calculator/calculate.usecase';
 import { AdditionCalculator } from '../../../usecase/calculator/operations/addition-calculator';
+import { ConfModule } from './config.module';
+import { DatabaseModule } from './database.module';
+import { UserRepository } from '../../user/repository/user.repository';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `src/infra/environment/dev.env`,
-    }),
-  ],
+  imports: [ ConfModule, DatabaseModule ],
   controllers: [ UserController, CalculatorController],
   providers: [
-    {
-      provide: ConfigService,
-      useFactory: () => new ConfigService(),
-    },
     {
       provide: AdditionCalculator,
       useFactory: () => new AdditionCalculator(),
@@ -35,13 +27,11 @@ import { AdditionCalculator } from '../../../usecase/calculator/operations/addit
     },
     {
       provide: CalculateUseCase,
-      useFactory: (calculatorStrategy: CalculatorStrategy) => new CalculateUseCase(calculatorStrategy),
-      inject: [CalculatorStrategy],
-    },
-    {
-      provide: 'EnvironmentConfigInterface',
-      useFactory: (configService: ConfigService) => new NestConfigService(configService),
-      inject: [ConfigService],
+      useFactory: (
+        calculatorStrategy: CalculatorStrategy,
+        userRepository: UserRepository,
+      ) => new CalculateUseCase(calculatorStrategy, userRepository),
+      inject: [CalculatorStrategy, UserRepository],
     },
     {
       provide: 'IdentityProviderInterface',

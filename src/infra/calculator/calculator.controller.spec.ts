@@ -29,11 +29,12 @@ describe('CalculatorController', () => {
   describe('Calculate', () => {
     it('must sum 2 numbers', async () => {
       const result = 10
+      const identityProviderId = '123'
       
       jest.spyOn(calculateUseCase, 'execute')
-        .mockReturnValueOnce({ result });
+        .mockResolvedValueOnce({ result });
       
-      const response = await calculatorController.addNumbers({
+      const response = await calculatorController.addNumbers(identityProviderId, {
         arguments: [7, 3],
       });
 
