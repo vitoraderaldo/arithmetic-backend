@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { UserLoginInputDto, UserLoginOutputDto } from "../../../usecase/user/user-login.dto";
+import { UserLoginOutputDto } from "../../../usecase/user/user-login.dto";
 import { UserLogsInUseCase } from "../../../usecase/user/user-login.case";
+import { UserLoginRequest } from "./requests/user-login.request";
 
 @Controller('/user')
 export class UserController {
@@ -9,7 +10,7 @@ export class UserController {
   ) {}
 
   @Post('/login')
-  public login(@Body() credetials: UserLoginInputDto): Promise<UserLoginOutputDto> {
+  public login(@Body() credetials: UserLoginRequest): Promise<UserLoginOutputDto> {
     return this.userLogsInUseCase.execute(credetials);
   }
 }

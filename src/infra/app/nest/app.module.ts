@@ -6,6 +6,10 @@ import { CognitoIdentityProviderService } from '../../user/repository/cognito-id
 import { IdentityProviderInterface } from '../../../domain/user/repository/identity-provider.interface';
 import { NestConfigService } from '../../environment/nest-config.service';
 import { EnvironmentConfigInterface } from '../../../@shared/environment/environment-config.interface';
+import { CalculatorController } from '../../calculator/routes/calculator.controller';
+import { CalculatorStrategy } from '../../../usecase/calculator/strategy/calculator-strategy';
+import { CalculateUseCase } from '../../../usecase/calculator/calculate.usecase';
+import { AdditionCalculator } from '../../../usecase/calculator/operations/addition-calculator';
 
 @Module({
   imports: [
@@ -14,12 +18,25 @@ import { EnvironmentConfigInterface } from '../../../@shared/environment/environ
       envFilePath: `src/infra/environment/dev.env`,
     }),
   ],
-  controllers: [ UserController],
+  controllers: [ UserController, CalculatorController],
   providers: [
     {
       provide: ConfigService,
       useFactory: () => new ConfigService(),
-      inject: [],
+    },
+    {
+      provide: AdditionCalculator,
+      useFactory: () => new AdditionCalculator(),
+    },
+    {
+      provide: CalculatorStrategy,
+      useFactory: (additionCalculator: AdditionCalculator) => new CalculatorStrategy(additionCalculator),
+      inject: [AdditionCalculator],
+    },
+    {
+      provide: CalculateUseCase,
+      useFactory: (calculatorStrategy: CalculatorStrategy) => new CalculateUseCase(calculatorStrategy),
+      inject: [CalculatorStrategy],
     },
     {
       provide: 'EnvironmentConfigInterface',
@@ -39,4 +56,5 @@ import { EnvironmentConfigInterface } from '../../../@shared/environment/environ
     },
   ],
 })
+
 export class AppModule {}
