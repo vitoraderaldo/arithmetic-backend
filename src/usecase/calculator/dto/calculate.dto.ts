@@ -2,7 +2,7 @@ import { OperationType } from "../../../domain/calculator/operation.types";
 
 export interface CalculateInputDto {
   identityProviderId: string,
-  operation: OperationType,
+  operationType: OperationType,
   arguments: number[] | string[]
 }
 

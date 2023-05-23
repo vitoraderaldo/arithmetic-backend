@@ -20,7 +20,7 @@ export class CalculatorController {
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
-      operation: OperationType.ADDITION,
+      operationType: OperationType.ADDITION,
       arguments: body.arguments,
     });
   }

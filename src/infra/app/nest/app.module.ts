@@ -11,6 +11,7 @@ import { AdditionCalculator } from '../../../usecase/calculator/operations/addit
 import { ConfModule } from './config.module';
 import { DatabaseModule } from './database.module';
 import { UserRepository } from '../../user/repository/user.repository';
+import { OperationRepository } from '../../calculator/repository/operation.repository';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
@@ -30,8 +31,9 @@ import { UserRepository } from '../../user/repository/user.repository';
       useFactory: (
         calculatorStrategy: CalculatorStrategy,
         userRepository: UserRepository,
-      ) => new CalculateUseCase(calculatorStrategy, userRepository),
-      inject: [CalculatorStrategy, UserRepository],
+        operationRepository: OperationRepository,
+      ) => new CalculateUseCase(calculatorStrategy, userRepository, operationRepository),
+      inject: [CalculatorStrategy, UserRepository, OperationRepository],
     },
     {
       provide: 'IdentityProviderInterface',

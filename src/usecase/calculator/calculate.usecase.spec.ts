@@ -4,17 +4,20 @@ import { CalculatorStrategy } from "./strategy/calculator-strategy";
 import { CalculateInputDto } from "./dto/calculate.dto";
 import { OperationType } from "../../domain/calculator/operation.types";
 import { UserRepositoryInterface } from "../../domain/user/repository/user-repository.interface";
+import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
 
 describe('Calculate Use Case', () => {
 
   let calculateUseCase: CalculateUseCase;
   let calculatorStrategy: CalculatorStrategy;
   let userRepositoryInterface: UserRepositoryInterface
+  let operationRepositoryInterface: OperationRepositoryInterface;
   
   beforeEach(() => {
     calculatorStrategy = createMock<CalculatorStrategy>();
     userRepositoryInterface = createMock<UserRepositoryInterface>();
-    calculateUseCase = new CalculateUseCase(calculatorStrategy, userRepositoryInterface);
+    operationRepositoryInterface = createMock<OperationRepositoryInterface>();
+    calculateUseCase = new CalculateUseCase(calculatorStrategy, userRepositoryInterface, operationRepositoryInterface);
   })
 
   afterEach(() => {
@@ -29,7 +32,7 @@ describe('Calculate Use Case', () => {
   it('must calculate the operation', async () => {
     const input: CalculateInputDto = {
       identityProviderId: '123',
-      operation: OperationType.ADDITION,
+      operationType: OperationType.ADDITION,
       arguments: [1, 2]
     }
     const result = 3
