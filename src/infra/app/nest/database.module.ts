@@ -6,12 +6,15 @@ import { UserModel } from '../../user/repository/user.model';
 import { UserRepository } from '../../user/repository/user.repository';
 import { OperationModel } from '../../calculator/repository/operation.model';
 import { OperationRepository } from '../../calculator/repository/operation.repository';
+import { RecordModel } from '../../record/repository/record.model';
+import { RecordRepository } from '../../record/repository/record-repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserModel,
       OperationModel,
+      RecordModel,
     ]),
     TypeOrmModule.forRootAsync({
       imports: [ConfModule],
@@ -27,7 +30,7 @@ import { OperationRepository } from '../../calculator/repository/operation.repos
       inject: ['EnvironmentConfigInterface'],
     }),
   ],
-  providers: [ UserRepository, OperationRepository ],
-  exports: [ UserRepository, OperationRepository ],
+  providers: [ UserRepository, OperationRepository, RecordRepository ],
+  exports: [ UserRepository, OperationRepository, RecordRepository ],
 })
 export class DatabaseModule {}

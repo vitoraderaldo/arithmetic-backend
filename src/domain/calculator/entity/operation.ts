@@ -12,7 +12,7 @@ export class Operation {
     return this.id;
   }
 
-  getType(): string {
+  getType(): OperationType {
     return this.type;
   }
 

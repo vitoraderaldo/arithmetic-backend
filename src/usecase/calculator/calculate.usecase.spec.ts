@@ -7,19 +7,22 @@ import { UserRepositoryInterface } from "../../domain/user/repository/user-repos
 import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
 import { User } from "../../domain/user/entity/user";
 import { Operation } from "../../domain/calculator/entity/operation";
+import { RecordRepositoryInterface } from "../../domain/record/repository/record-repository.interface";
 
 describe('Calculate Use Case', () => {
 
   let calculateUseCase: CalculateUseCase;
   let calculatorStrategy: CalculatorStrategy;
-  let userRepositoryInterface: UserRepositoryInterface
-  let operationRepositoryInterface: OperationRepositoryInterface;
+  let userRepository: UserRepositoryInterface
+  let operationRepository: OperationRepositoryInterface;
+  let recordRepository: RecordRepositoryInterface;
   
   beforeEach(() => {
     calculatorStrategy = createMock<CalculatorStrategy>();
-    userRepositoryInterface = createMock<UserRepositoryInterface>();
-    operationRepositoryInterface = createMock<OperationRepositoryInterface>();
-    calculateUseCase = new CalculateUseCase(calculatorStrategy, userRepositoryInterface, operationRepositoryInterface);
+    userRepository = createMock<UserRepositoryInterface>();
+    operationRepository = createMock<OperationRepositoryInterface>();
+    recordRepository = createMock<RecordRepositoryInterface>();
+    calculateUseCase = new CalculateUseCase(calculatorStrategy, userRepository, operationRepository, recordRepository);
   })
 
   afterEach(() => {
@@ -43,14 +46,15 @@ describe('Calculate Use Case', () => {
     const operation = new Operation(1, OperationType.ADDITION, 10)
 
     jest
-      .spyOn(userRepositoryInterface, 'findByIdentityProviderId')
+      .spyOn(userRepository, 'findByIdentityProviderId')
       .mockResolvedValueOnce(user);
 
     jest
-      .spyOn(operationRepositoryInterface, 'findByType')
+      .spyOn(operationRepository, 'findByType')
       .mockResolvedValueOnce(operation);
 
-    const updateBalanceSpy = jest.spyOn(userRepositoryInterface, 'updateBalance');
+    const updateBalanceSpy = jest.spyOn(userRepository, 'updateBalance');
+    const createRecordSpy = jest.spyOn(recordRepository, 'create');
 
     jest
       .spyOn(calculatorStrategy, 'calculate')
@@ -60,6 +64,7 @@ describe('Calculate Use Case', () => {
     expect(output).toEqual({ result });
     expect(user.getCurrentBalance()).toEqual(90);
     expect(updateBalanceSpy).toHaveBeenCalledWith(user);
+    expect(createRecordSpy).toHaveBeenCalled()
   })
 
   it('must not calculate the operation when the user balance is not enough', async () => {
@@ -72,19 +77,21 @@ describe('Calculate Use Case', () => {
     const operation = new Operation(1, OperationType.ADDITION, 5.1)
 
     jest
-      .spyOn(userRepositoryInterface, 'findByIdentityProviderId')
+      .spyOn(userRepository, 'findByIdentityProviderId')
       .mockResolvedValueOnce(user);
 
     jest
-      .spyOn(operationRepositoryInterface, 'findByType')
+      .spyOn(operationRepository, 'findByType')
       .mockResolvedValueOnce(operation);
 
-    const updateBalanceSpy = jest.spyOn(userRepositoryInterface, 'updateBalance');
+    const updateBalanceSpy = jest.spyOn(userRepository, 'updateBalance');
+    const createRecordSpy = jest.spyOn(recordRepository, 'create');
 
     const output = calculateUseCase.execute(input);
     await expect(output).rejects.toThrowError('User balance is not enough');
     expect(user.getCurrentBalance()).toEqual(5);
     expect(updateBalanceSpy).not.toHaveBeenCalled();
+    expect(createRecordSpy).not.toHaveBeenCalled();
   })
 
 })

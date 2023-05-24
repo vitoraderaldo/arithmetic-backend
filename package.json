@@ -37,7 +37,8 @@
     "mysql2": "^3.3.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.16"
+    "typeorm": "^0.3.16",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@golevelup/ts-jest": "^0.3.7",
@@ -49,6 +50,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "18.16.12",
     "@types/supertest": "^2.0.11",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
