@@ -28,7 +28,7 @@ export class User {
       throw new Error('Amount must be greater than 0');
     }
     if (amount > this.currentBalance) {
-      throw new Error('Amount must be less than current balance');
+      throw new Error('User balance is not enough');
     }
     this.currentBalance -= amount;
   }

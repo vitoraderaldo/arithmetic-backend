@@ -15,7 +15,10 @@ export class CalculateUseCase {
     const { identityProviderId, operationType } = input;
     const user = await this.userRepositoryInterface.findByIdentityProviderId(identityProviderId);
     const operation = await this.operationRepositoryInterface.findByType(operationType);
+
+    user.spendMoney(operation.getCost());
     const result = this.calculatorStrategy.calculate(operationType, ...input.arguments);
+    await this.userRepositoryInterface.updateBalance(user);
     return { result };
   }
 

@@ -43,7 +43,7 @@ describe('User', () => {
     ${1000}
   `('must not spend money if amount is greater than current balance', ({amount}: Props) => {
     const spendMoney = () => user.spendMoney(amount);
-    expect(spendMoney).toThrowError('Amount must be less than current balance');
+    expect(spendMoney).toThrowError('User balance is not enough');
   })
 
 })

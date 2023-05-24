@@ -18,10 +18,16 @@ export class UserRepository implements UserRepositoryInterface {
     }});
 
     if (!userModel?.id) {
-      return null
+      throw new Error('User not found')
     }
     return new User(userModel.id, userModel.email, userModel.statusId, userModel.currentBalance);
   }
 
-  
+  async updateBalance(user: User): Promise<void> {
+    await this.repo.update({ 
+      id: user.getId()
+    },
+    { currentBalance: user.getCurrentBalance() })
+  }
+
 }

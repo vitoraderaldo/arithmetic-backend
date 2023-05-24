@@ -18,7 +18,7 @@ export class OperationRepository implements OperationRepositoryInterface {
       type
     }});
     if (!operation?.id) {
-      return null;
+      throw new Error('Operation not found')
     }
     return new Operation(operation.id, operation.type, operation.cost);
   }
