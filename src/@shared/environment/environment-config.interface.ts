@@ -1,6 +1,7 @@
 export interface CognitoEnvConfig {
   region: string;
   clientId: string;
+  userPoolId: string;
 }
 
 export interface DatabaseConfig {

@@ -4,6 +4,7 @@ import { CalculatorController } from './routes/calculator.controller';
 import { CalculateUseCase } from '../../usecase/calculator/calculate.usecase';
 import { FindOperationsUseCase } from '../../usecase/calculator/find-operations.usecase';
 import { FindOperationsOutputDto } from '../../usecase/calculator/dto/operation.dto';
+import { AuthGuard } from '../guards/auth.guard';
 
 describe('CalculatorController', () => {
   let calculatorController: CalculatorController;
@@ -23,7 +24,10 @@ describe('CalculatorController', () => {
           useValue: createMock<FindOperationsUseCase>(),
         }
       ],
-    }).compile();
+    })
+    .overrideGuard(AuthGuard)
+    .useValue(createMock<AuthGuard>())
+    .compile();
 
     calculatorController = app.get<CalculatorController>(CalculatorController);
     calculateUseCase = app.get<CalculateUseCase>(CalculateUseCase);

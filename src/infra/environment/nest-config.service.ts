@@ -9,6 +9,7 @@ export class NestConfigService implements EnvironmentConfigInterface {
     return {
       region: this.nestConfig.get('COGNITO_REGION'),
       clientId: this.nestConfig.get('COGNITO_CLIENT_ID'),
+      userPoolId: this.nestConfig.get('COGNITO_USER_POOL_ID'),
     }
   }
 
