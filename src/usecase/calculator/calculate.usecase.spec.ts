@@ -61,7 +61,7 @@ describe('Calculate Use Case', () => {
       .mockReturnValueOnce(result);
 
     const output = await calculateUseCase.execute(input);
-    expect(output).toEqual({ result });
+    expect(output).toEqual({ result, finalBalance: 90 });
     expect(user.getCurrentBalance()).toEqual(90);
     expect(updateBalanceSpy).toHaveBeenCalledWith(user);
     expect(createRecordSpy).toHaveBeenCalled()

@@ -8,4 +8,5 @@ export interface CalculateInputDto {
 
 export interface CalculateOutputDto {
   result: number | string
+  finalBalance: number
 }

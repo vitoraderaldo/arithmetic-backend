@@ -20,7 +20,10 @@ export class CalculateUseCase {
     const [ user, operation ] = await this.getUserAndOperation(input);
     const result = await this.updateUserBalanceAndPerformCalculation(user, operation, input)
     await this.saveOperationRecord(user, operation, result);
-    return { result };
+    return { 
+      result, 
+      finalBalance: Number(user.getCurrentBalance().toFixed(2))
+    };
   }
 
   private getUserAndOperation(input: CalculateInputDto): Promise<[User, Operation]> {
