@@ -9,7 +9,9 @@ exports.up = function(knex) {
     CREATE TABLE operation (
       id TINYINT AUTO_INCREMENT PRIMARY KEY,
       type ENUM('ADDITION','SUBTRACTION','MULTIPLICATION','DIVISION','SQUARE_ROOT','RANDOM_STRING') NOT NULL,
+      name VARCHAR(255) NOT NULL,
       cost DECIMAL(10,2) NOT NULL,
+      inputs_required TINYINT NOT NULL,
       date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
       date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
       INDEX idx_type (type)
@@ -17,13 +19,13 @@ exports.up = function(knex) {
   `).transacting(trx)
 
   const query2 = knex.schema.raw(`
-    INSERT INTO operation (type, cost) VALUES
-    ('ADDITION', 1.10),
-    ('SUBTRACTION', 2.05),
-    ('MULTIPLICATION', 1.00),
-    ('DIVISION', 3.4),
-    ('SQUARE_ROOT', 3.5),
-    ('RANDOM_STRING', 0.5);
+    INSERT INTO operation (type, name, cost, inputs_required) VALUES
+    ('ADDITION', 'Addition', 1.10, 2),
+    ('SUBTRACTION', 'Subtraction', 2.05, 2),
+    ('MULTIPLICATION', 'Multiplication', 1.00, 2),
+    ('DIVISION', 'Division', 3.4, 2),
+    ('SQUARE_ROOT', 'Square Root', 3.5, 1),
+    ('RANDOM_STRING', 'Random String', 0.5, 0);
   `).transacting(trx)
 
   return Promise.all([query1, query2])

@@ -13,6 +13,7 @@ import { DatabaseModule } from './database.module';
 import { UserRepository } from '../../user/repository/user.repository';
 import { OperationRepository } from '../../calculator/repository/operation.repository';
 import { RecordRepository } from '../../record/repository/record-repository';
+import { FindOperationsUseCase } from '../../../usecase/calculator/find-operations.usecase';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
@@ -26,6 +27,11 @@ import { RecordRepository } from '../../record/repository/record-repository';
       provide: CalculatorStrategy,
       useFactory: (additionCalculator: AdditionCalculator) => new CalculatorStrategy(additionCalculator),
       inject: [AdditionCalculator],
+    },
+    {
+      provide: FindOperationsUseCase,
+      useFactory: (operationRepository: OperationRepository)  => new FindOperationsUseCase(operationRepository),
+      inject: [OperationRepository],
     },
     {
       provide: CalculateUseCase,

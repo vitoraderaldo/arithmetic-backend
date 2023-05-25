@@ -43,7 +43,7 @@ describe('Calculate Use Case', () => {
     const result = 3
 
     const user = new User(1, 'email@email.com', 1, 100)
-    const operation = new Operation(1, OperationType.ADDITION, 10)
+    const operation = new Operation(1, OperationType.ADDITION, 'Addition', 10, 2)
 
     jest
       .spyOn(userRepository, 'findByIdentityProviderId')
@@ -74,7 +74,7 @@ describe('Calculate Use Case', () => {
       arguments: [1, 2]
     }
     const user = new User(1, 'email@email.com', 1, 5)
-    const operation = new Operation(1, OperationType.ADDITION, 5.1)
+    const operation = new Operation(1, OperationType.ADDITION, 'Addition', 5.1, 2)
 
     jest
       .spyOn(userRepository, 'findByIdentityProviderId')

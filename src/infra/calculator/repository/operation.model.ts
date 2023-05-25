@@ -15,11 +15,23 @@ export class OperationModel {
   })
   type: OperationType;
 
+  @Column('varchar', {
+    nullable: false,
+    name: 'name',
+  })
+  name: string;
+
   @Column('decimal', {
     nullable: false,
     name: 'cost',
   })
   cost: number;
+
+  @Column('tinyint', {
+    nullable: false,
+    name: 'inputs_required',
+  })
+  inputsRequired: number;
 
   @Column('timestamp', {
     nullable: false,

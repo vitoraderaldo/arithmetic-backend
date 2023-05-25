@@ -8,7 +8,7 @@ describe('Record', () => {
   describe('Create new Record', () => {
     it('must create a new record successfully', () => {
       const user = new User(1, 'email@email.com', 1, 100);
-      const operation = new Operation(1, OperationType.ADDITION, 10);
+      const operation = new Operation(1, OperationType.ADDITION, 'Addition', 10, 2);
       const result = '10';
       
       const record = Record.createNewRecord(user, operation, result);
