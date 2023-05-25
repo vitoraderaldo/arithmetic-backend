@@ -1,16 +1,23 @@
 import { createMock } from "@golevelup/ts-jest";
-import { AdditionCalculator } from "../operations/addition-calculator";
 import { CalculatorStrategy } from "./calculator-strategy";
 import { OperationType } from "../../../domain/calculator/operation.types";
+import { CalculatorInterface } from "./calculator.interface";
+
+type Props = {
+  operation: OperationType;
+  input: any[];
+  result: number;
+  expectedFunction: 'addition' | 'subtraction' | 'multiplication' | 'division' | 'squareRoot' | 'randomString';
+}
 
 describe('Calculator Strategy', () => {
 
   let calculatorStrategy: CalculatorStrategy;
-  let additionCalculator: AdditionCalculator;
+  let calculator: CalculatorInterface;
   
   beforeEach(() => {
-    additionCalculator = createMock<AdditionCalculator>();
-    calculatorStrategy = new CalculatorStrategy(additionCalculator);
+    calculator = createMock<CalculatorInterface>();
+    calculatorStrategy = new CalculatorStrategy(calculator);
   })
 
   afterEach(() => {
@@ -22,15 +29,21 @@ describe('Calculator Strategy', () => {
     expect(calculatorStrategy).toBeDefined();
   })
 
-  it('must calculate an addition operation', () => {
-    const numbers = [1, 2]
-    const result = 3
+  it.each`
+    operation                       | input     | result      | expectedFunction
+    ${OperationType.ADDITION}       | ${[1, 2]} | ${3}        | ${'addition'}
+    ${OperationType.SUBTRACTION}    | ${[1, 2]} | ${-1}       | ${'subtraction'}
+    ${OperationType.MULTIPLICATION} | ${[1, 2]} | ${2}        | ${'multiplication'}
+    ${OperationType.DIVISION}       | ${[1, 2]} | ${0.5}      | ${'division'}
+    ${OperationType.SQUARE_ROOT}    | ${[1]}    | ${1}        | ${'squareRoot'}
+    ${OperationType.RANDOM_STRING}  | ${[]}     | ${'string'} | ${'randomString'}
+  `('must calculate operations', ({operation, input, result, expectedFunction}: Props) => {
 
     jest
-      .spyOn(additionCalculator, 'calculate')
+      .spyOn(calculator, expectedFunction)
       .mockReturnValueOnce(result)
 
-    const response = calculatorStrategy.calculate(OperationType.ADDITION, ...numbers);
+    const response = calculatorStrategy.calculate(operation, ...input);
     expect(response).toEqual(result);
   })
 

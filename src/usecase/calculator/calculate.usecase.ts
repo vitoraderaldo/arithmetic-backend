@@ -34,14 +34,14 @@ export class CalculateUseCase {
     ])
   }
 
-  private async updateUserBalanceAndPerformCalculation(user: User, operation: Operation, input: CalculateInputDto): Promise<number> {
+  private async updateUserBalanceAndPerformCalculation(user: User, operation: Operation, input: CalculateInputDto): Promise<number | string> {
     user.spendMoney(operation.getCost());
     const result = this.calculatorStrategy.calculate(operation.getType(), ...input.arguments);
     await this.userRepository.updateBalance(user);
     return result
   }
 
-  private async saveOperationRecord(user: User, operation: Operation, result: number): Promise<void> {
+  private async saveOperationRecord(user: User, operation: Operation, result: number | string): Promise<void> {
     const record = Record.createNewRecord(user, operation, result.toString());
     await this.recordRepository.create(record);
   }

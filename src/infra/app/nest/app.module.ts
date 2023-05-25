@@ -7,26 +7,27 @@ import { EnvironmentConfigInterface } from '../../../@shared/environment/environ
 import { CalculatorController } from '../../calculator/routes/calculator.controller';
 import { CalculatorStrategy } from '../../../usecase/calculator/strategy/calculator-strategy';
 import { CalculateUseCase } from '../../../usecase/calculator/calculate.usecase';
-import { AdditionCalculator } from '../../../usecase/calculator/operations/addition-calculator';
 import { ConfModule } from './config.module';
 import { DatabaseModule } from './database.module';
 import { UserRepository } from '../../user/repository/user.repository';
 import { OperationRepository } from '../../calculator/repository/operation.repository';
 import { RecordRepository } from '../../record/repository/record-repository';
 import { FindOperationsUseCase } from '../../../usecase/calculator/find-operations.usecase';
+import { Calculator } from '../../../usecase/calculator/operations/calculator';
+import { CalculatorInterface } from '../../../usecase/calculator/strategy/calculator.interface';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
   controllers: [ UserController, CalculatorController],
   providers: [
     {
-      provide: AdditionCalculator,
-      useFactory: () => new AdditionCalculator(),
+      provide: 'CalculatorInterface',
+      useFactory: () => new Calculator(),
     },
     {
       provide: CalculatorStrategy,
-      useFactory: (additionCalculator: AdditionCalculator) => new CalculatorStrategy(additionCalculator),
-      inject: [AdditionCalculator],
+      useFactory: (calculator: CalculatorInterface) => new CalculatorStrategy(calculator),
+      inject: ['CalculatorInterface'],
     },
     {
       provide: FindOperationsUseCase,

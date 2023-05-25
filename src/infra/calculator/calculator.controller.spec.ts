@@ -35,12 +35,12 @@ describe('CalculatorController', () => {
   });
 
   describe('Calculate', () => {
+    const finalBalance = 90
+    const identityProviderId = '123'
     it('must sum 2 numbers', async () => {
       const result = 10
-      const finalBalance = 90
-      const identityProviderId = '123'
-      
-      jest.spyOn(calculateUseCase, 'execute')
+      jest
+        .spyOn(calculateUseCase, 'execute')
         .mockResolvedValueOnce({ result, finalBalance });
       
       const response = await calculatorController.addNumbers(identityProviderId, {
@@ -49,7 +49,64 @@ describe('CalculatorController', () => {
 
       expect(response).toEqual({ result, finalBalance })
     })
-   
+
+    it('must subtract 2 numbers', async () => {     
+      const result = 10 
+      jest
+        .spyOn(calculateUseCase, 'execute')
+        .mockResolvedValueOnce({ result, finalBalance });
+      
+      const response = await calculatorController.subtractNumbers(identityProviderId, {
+        arguments: [20, 10],
+      });
+      expect(response).toEqual({ result, finalBalance })
+    })
+
+    it('must multiply 2 numbers', async () => {
+      const result = 10
+      jest
+        .spyOn(calculateUseCase, 'execute')
+        .mockResolvedValueOnce({ result, finalBalance });
+      
+      const response = await calculatorController.multiplyNumbers(identityProviderId, {
+        arguments: [2, 5],
+      });
+      expect(response).toEqual({ result, finalBalance })
+    })
+
+    it('must divide 2 numbers', async () => {
+      const result = 10
+      jest
+        .spyOn(calculateUseCase, 'execute')
+        .mockResolvedValueOnce({ result, finalBalance });
+      
+      const response = await calculatorController.divideNumbers(identityProviderId, {
+        arguments: [100, 10],
+      });
+      expect(response).toEqual({ result, finalBalance })
+    })
+
+    it('must calculate the square root of a number', async () => {
+      const result = 10
+      jest
+        .spyOn(calculateUseCase, 'execute')
+        .mockResolvedValueOnce({ result, finalBalance });
+      
+      const response = await calculatorController.calculateSquareRoot(identityProviderId, {
+        arguments: [100],
+      });
+      expect(response).toEqual({ result, finalBalance })
+    })
+
+    it('must generate random string', async () => {
+      const result = 'random-string'
+      jest
+        .spyOn(calculateUseCase, 'execute')
+        .mockResolvedValueOnce({ result, finalBalance });
+      
+      const response = await calculatorController.generateRandomString(identityProviderId);
+      expect(response).toEqual({ result, finalBalance })
+    })
   });
 
   describe('Find Operations', () => {
