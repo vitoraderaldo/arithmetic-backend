@@ -6,5 +6,5 @@ export const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
-  await app.listen(5001);
+  await app.listen(80);
 }

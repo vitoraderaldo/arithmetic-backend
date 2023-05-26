@@ -15,10 +15,11 @@ import { RecordRepository } from '../../record/repository/record-repository';
 import { FindOperationsUseCase } from '../../../usecase/calculator/find-operations.usecase';
 import { Calculator } from '../../../usecase/calculator/operations/calculator';
 import { CalculatorInterface } from '../../../usecase/calculator/strategy/calculator.interface';
+import { HealthCheckController } from '../../user/routes/health-check.controller';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
-  controllers: [ UserController, CalculatorController],
+  controllers: [ UserController, CalculatorController, HealthCheckController],
   providers: [
     {
       provide: 'CalculatorInterface',

@@ -1,16 +1,8 @@
 version: "3"
 services:
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: arithmetic
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+   api:
+    image: vitor96k/arithmetic-backend:2.0.0
     ports:
-      - "3320:3306"
-    volumes:
-      - db-data:/var/lib/mysql
-
-volumes:
-  db-data:
+      - "80"
+    env_file:
+      - 'src/infra/environment/${ENVIRONMENT}.env'
