@@ -1,10 +1,12 @@
 import { OperationType } from "../../../domain/calculator/operation.types";
+import { RandomStringService } from "../operations/random-string.service";
 import { CalculatorInterface } from "./calculator.interface";
 
 export class CalculatorStrategy {
 
   constructor(
-    private readonly calculator: CalculatorInterface
+    private readonly calculator: CalculatorInterface,
+    private readonly randomStringService: RandomStringService,
   ) {}
   
   public calculate(operation: OperationType, ...input: any[]) {
@@ -20,7 +22,7 @@ export class CalculatorStrategy {
       case OperationType.SQUARE_ROOT:
         return this.calculator.squareRoot(input[0])
       case OperationType.RANDOM_STRING:
-        return this.calculator.randomString()
+        return this.randomStringService.randomString()
       default:
         throw new Error('Operation not implemented')
     }

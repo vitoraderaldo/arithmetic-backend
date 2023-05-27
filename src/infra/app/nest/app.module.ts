@@ -18,6 +18,11 @@ import { CalculatorInterface } from '../../../usecase/calculator/strategy/calcul
 import { HealthCheckController } from '../../user/routes/health-check.controller';
 import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
 import { RecordsController } from '../../record/routes/records.controller';
+import { RandomStringInterface } from '../../../usecase/calculator/strategy/random-string.interface';
+import { RandomStringOrg } from '../../../usecase/calculator/operations/random-string-org';
+import { RandomStringService } from '../../../usecase/calculator/operations/random-string.service';
+import { AxiosService } from '../../http-client/axios.service';
+import { HtppClient } from '../../../@shared/interface/http-client.interface';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
@@ -28,9 +33,23 @@ import { RecordsController } from '../../record/routes/records.controller';
       useFactory: () => new Calculator(),
     },
     {
+      provide: 'HtppClient',
+      useFactory: () => new AxiosService(),
+    },
+    {
+      provide: 'RandomStringInterface',
+      useFactory: (htppClient: HtppClient) => new RandomStringOrg(htppClient),
+      inject: ['HtppClient'],
+    },
+    {
+      provide: RandomStringService,
+      useFactory: (randomStringInterface: RandomStringInterface) => new RandomStringService(randomStringInterface),
+      inject: ['RandomStringInterface'],
+    },
+    {
       provide: CalculatorStrategy,
-      useFactory: (calculator: CalculatorInterface) => new CalculatorStrategy(calculator),
-      inject: ['CalculatorInterface'],
+      useFactory: (calculator: CalculatorInterface, randomStringService: RandomStringService) => new CalculatorStrategy(calculator, randomStringService),
+      inject: ['CalculatorInterface', RandomStringService],
     },
     {
       provide: FindOperationsUseCase,
