@@ -25,6 +25,7 @@ import { RecordRepository } from '../../record/repository/record-repository';
           type: 'mysql',
           autoLoadEntities: true,
           synchronize: false,
+          timezone: '+00:00'
         };
       },
       inject: ['EnvironmentConfigInterface'],

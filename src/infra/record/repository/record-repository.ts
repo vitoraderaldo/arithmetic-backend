@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { RecordRepositoryInterface } from '../../../domain/record/repository/record-repository.interface';
 import { RecordModel } from './record.model';
 import { Record } from '../../../domain/record/entity/record';
+import { PaginatedResult } from '../../../@shared/interface/paginated-result';
+import { RecordSearchRepositoryDto } from '../../../domain/record/repository/repository.dto';
 
 @Injectable()
 export class RecordRepository implements RecordRepositoryInterface {
@@ -23,6 +25,37 @@ export class RecordRepository implements RecordRepositoryInterface {
       dateCreated: record.getCreatedAt(),
     }
     await this.repo.save(model);
+  }
+
+  async search(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>> {
+    const [data, total] = await this.repo.findAndCount({
+      where: {
+        operationId: params.filter.operationId,
+        userId: params.filter.userId,
+        dateCreated: Between(params.filter.startDate, params.filter.endDate),
+      },
+      skip: (params.pagination.page - 1) * params.pagination.pageSize,
+      take: params.pagination.pageSize,
+      order: {
+        [params.sort.field]: params.sort.order,
+      }
+    });
+    return {
+      data: data.map(this.mapRecordModelToEntity),
+      total,
+    }
+  }
+
+  private mapRecordModelToEntity(model: RecordModel): Record {
+    return Record.createFromExistingRecord(
+      model.id,
+      model.operationId,
+      model.userId,
+      model.amount,
+      model.userBalance,
+      model.operationResponse,
+      model.dateCreated,
+    );
   }
 
 }

@@ -16,10 +16,12 @@ import { FindOperationsUseCase } from '../../../usecase/calculator/find-operatio
 import { Calculator } from '../../../usecase/calculator/operations/calculator';
 import { CalculatorInterface } from '../../../usecase/calculator/strategy/calculator.interface';
 import { HealthCheckController } from '../../user/routes/health-check.controller';
+import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
+import { RecordsController } from '../../record/routes/records.controller';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
-  controllers: [ UserController, CalculatorController, HealthCheckController],
+  controllers: [ UserController, CalculatorController, HealthCheckController, RecordsController],
   providers: [
     {
       provide: 'CalculatorInterface',
@@ -55,6 +57,12 @@ import { HealthCheckController } from '../../user/routes/health-check.controller
       useFactory: (identityProviderInterface: IdentityProviderInterface) =>
         new UserLogsInUseCase(identityProviderInterface),
       inject: ['IdentityProviderInterface'],
+    },
+    {
+      provide: SearchRecordsUseCase,
+      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository) =>
+        new SearchRecordsUseCase(recordRepository, userRepository),
+      inject: [RecordRepository, UserRepository],
     },
   ],
 })
