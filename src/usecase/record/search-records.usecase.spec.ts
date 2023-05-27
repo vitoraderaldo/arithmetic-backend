@@ -8,17 +8,20 @@ import { PaginatedResult } from "../../@shared/interface/paginated-result";
 import { Record } from "../../domain/record/entity/record";
 import { Operation } from "../../domain/calculator/entity/operation";
 import { OperationType } from "../../domain/calculator/operation.types";
+import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
 
 describe('SearchRecordsUseCase', () => {
 
   let useCase: SearchRecordsUseCase;
   let recordRepository: RecordRepositoryInterface
   let userRepository: UserRepositoryInterface
+  let operationRepository: OperationRepositoryInterface
 
   beforeEach(() => {
     recordRepository = createMock<RecordRepositoryInterface>();
     userRepository = createMock<UserRepositoryInterface>();
-    useCase = new SearchRecordsUseCase(recordRepository, userRepository);
+    operationRepository = createMock<OperationRepositoryInterface>();
+    useCase = new SearchRecordsUseCase(recordRepository, userRepository, operationRepository);
   })
 
   it('must be defined', () => {
@@ -38,6 +41,7 @@ describe('SearchRecordsUseCase', () => {
     const user = new User(1, 'vitor@email.com', 1, 100);
     const addOperation = new Operation(1, OperationType.ADDITION, 'Add', 10, 2);
     const subtractOperation = new Operation(2, OperationType.SUBTRACTION, 'Sub', 6, 2);
+
     const result: PaginatedResult<Record> = {
       data: [
         Record.createNewRecord(user, addOperation, '5'),
@@ -45,6 +49,10 @@ describe('SearchRecordsUseCase', () => {
       ],
       total: 2,
     }
+
+    jest
+      .spyOn(operationRepository, 'findAll')
+      .mockResolvedValue([addOperation, subtractOperation])
 
     jest
       .spyOn(userRepository, 'findByIdentityProviderId')
@@ -67,7 +75,7 @@ describe('SearchRecordsUseCase', () => {
         amount: result.data[0].getAmount(),
         date: result.data[0].getCreatedAt(),
         id: result.data[0].getId(),
-        operationName: result.data[0].getOperationId().toString(),
+        operationName: addOperation.getName(),
         operationResponse: result.data[0].getOperationResponse(),
         userBalance: result.data[0].getUserBalance(),
       },
@@ -75,7 +83,7 @@ describe('SearchRecordsUseCase', () => {
         amount: result.data[1].getAmount(),
         date: result.data[1].getCreatedAt(),
         id: result.data[1].getId(),
-        operationName: result.data[1].getOperationId().toString(),
+        operationName: subtractOperation.getName(),
         operationResponse: result.data[1].getOperationResponse(),
         userBalance: result.data[1].getUserBalance(),
       },

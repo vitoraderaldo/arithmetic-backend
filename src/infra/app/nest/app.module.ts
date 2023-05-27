@@ -60,9 +60,9 @@ import { RecordsController } from '../../record/routes/records.controller';
     },
     {
       provide: SearchRecordsUseCase,
-      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository) =>
-        new SearchRecordsUseCase(recordRepository, userRepository),
-      inject: [RecordRepository, UserRepository],
+      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository, operationRepository: OperationRepository) =>
+        new SearchRecordsUseCase(recordRepository, userRepository, operationRepository),
+      inject: [RecordRepository, UserRepository, OperationRepository],
     },
   ],
 })

@@ -1,13 +1,17 @@
 import { RecordRepositoryInterface } from "../../domain/record/repository/record-repository.interface";
-import { SearchRecordOutput, SearchRecordsInputDto, SearchRecordsOutputDto } from "./dto/search-records.dto";
+import { SearchRecordsInputDto, SearchRecordsOutputDto } from "./dto/search-records.dto";
 import { Record } from '../../domain/record/entity/record'
 import { UserRepositoryInterface } from "../../domain/user/repository/user-repository.interface";
+import { PaginatedResult } from "../../@shared/interface/paginated-result";
+import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
+import { Operation } from "../../domain/calculator/entity/operation";
 
 export class SearchRecordsUseCase {
 
   constructor(
     private readonly recordRepository: RecordRepositoryInterface,
     private readonly userRepository: UserRepositoryInterface,
+    private readonly operationRepository: OperationRepositoryInterface,
   ) {}
 
   public async execute(input: SearchRecordsInputDto): Promise<SearchRecordsOutputDto> {
@@ -29,9 +33,11 @@ export class SearchRecordsUseCase {
         order: 'DESC',
       }
     });
+
+    const recordsOutput = await this.mapPaginatedResultToOutputDto(paginatedResult);
     
     return {
-      records: paginatedResult.data.map(this.mapRecordEntityToOutputDto),
+      records: recordsOutput,
       pagination: {
         page: pagination.page,
         pageSize: pagination.pageSize,
@@ -41,15 +47,25 @@ export class SearchRecordsUseCase {
     }
   }
 
-  private mapRecordEntityToOutputDto(record: Record): SearchRecordOutput {
-    return {
-      id: record.getId(),
-      operationName: record.getOperationId().toString(),
-      amount: record.getAmount(),
-      userBalance: record.getUserBalance(),
-      operationResponse: record.getOperationResponse(),
-      date: record.getCreatedAt(),
-    }
+  private async mapPaginatedResultToOutputDto(paginatedResult: PaginatedResult<Record>) {
+    const operations = await this.getOperations();
+    return paginatedResult.data.map(record => {
+      return {
+        id: record.getId(),
+        operationName: operations.get(record.getOperationId()).getName(),
+        amount: record.getAmount(),
+        userBalance: record.getUserBalance(),
+        operationResponse: record.getOperationResponse(),
+        date: record.getCreatedAt(),
+      }
+    })
   }
- 
+
+  private async getOperations(): Promise<Map<number, Operation>> {
+    const operations = await this.operationRepository.findAll();
+    return new Map(operations.map(operation => [
+      operation.getId(), 
+      operation
+    ]));
+  }
 }
