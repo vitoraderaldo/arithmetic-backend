@@ -17,7 +17,7 @@ export class SearchRecordsUseCase {
   public async execute(input: SearchRecordsInputDto): Promise<SearchRecordsOutputDto> {
     const { filter, pagination } = input;
     const user = await this.userRepository.findByIdentityProviderId(filter.identityProviderId);
-    const paginatedResult = await this.recordRepository.search({
+    const paginatedResult = await this.recordRepository.searchActive({
       filter: {
         operationId: filter.operationId || undefined,
         startDate: filter.startDate,

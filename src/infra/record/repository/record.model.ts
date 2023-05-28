@@ -38,6 +38,13 @@ export class RecordModel {
   })
   operationResponse: string;
 
+  @Column('tinyint', {
+    nullable: false,
+    name: 'deleted',
+    default: false,
+  })
+  deleted: boolean;
+
   @Column('timestamp', {
     nullable: false,
     name: 'date_created',

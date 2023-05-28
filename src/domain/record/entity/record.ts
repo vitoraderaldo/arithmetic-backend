@@ -11,15 +11,16 @@ export class Record {
     private readonly amount: number,
     private readonly userBalance: number,
     private readonly operationResponse: string,
+    private deleted: boolean,
     private readonly createdAt: Date,
   ) {}
 
   public static createNewRecord(user: User, operation: Operation, result: string) {
-    return new Record(uuid(), operation.getId(), user.getId(), operation.getCost(), user.getCurrentBalance(), result, new Date())
+    return new Record(uuid(), operation.getId(), user.getId(), operation.getCost(), user.getCurrentBalance(), result, false, new Date())
   }
 
-  public static createFromExistingRecord(id: string, operationId: number, userId: number, amount: number, userBalance: number, operationResponse: string, createdAt: Date) {
-    return new Record(id, operationId, userId, amount, userBalance, operationResponse, createdAt)
+  public static createFromExistingRecord(id: string, operationId: number, userId: number, amount: number, userBalance: number, operationResponse: string, isDeleted: boolean, createdAt: Date) {
+    return new Record(id, operationId, userId, amount, userBalance, operationResponse, isDeleted, createdAt)
   }
 
   public getId(): string {
@@ -48,6 +49,14 @@ export class Record {
 
   public getCreatedAt(): Date {
     return this.createdAt;
+  }
+
+  public isDeleted(): boolean {
+    return this.deleted;
+  }
+
+  public deleteRecord(): void {
+    this.deleted = true;
   }
 
 }

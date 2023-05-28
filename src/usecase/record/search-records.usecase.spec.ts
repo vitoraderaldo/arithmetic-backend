@@ -59,7 +59,7 @@ describe('SearchRecordsUseCase', () => {
       .mockResolvedValue(user);
 
     jest
-      .spyOn(recordRepository, 'search')
+      .spyOn(recordRepository, 'searchActive')
       .mockResolvedValue(result);
 
     const response = await useCase.execute(input);

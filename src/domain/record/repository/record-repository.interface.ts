@@ -4,5 +4,7 @@ import { RecordSearchRepositoryDto } from './repository.dto'
 
 export interface RecordRepositoryInterface {
   create(record: Record): Promise<void>
-  search(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>>
+  searchActive(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>>
+  findById(id: string): Promise<Record>
+  deleteById(id: string): Promise<void>
 }

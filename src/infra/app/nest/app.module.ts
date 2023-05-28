@@ -23,6 +23,7 @@ import { RandomStringOrg } from '../../../usecase/calculator/operations/random-s
 import { RandomStringService } from '../../../usecase/calculator/operations/random-string.service';
 import { AxiosService } from '../../http-client/axios.service';
 import { HtppClient } from '../../../@shared/interface/http-client.interface';
+import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 
 @Module({
   imports: [ ConfModule, DatabaseModule ],
@@ -82,6 +83,12 @@ import { HtppClient } from '../../../@shared/interface/http-client.interface';
       useFactory: (recordRepository: RecordRepository, userRepository: UserRepository, operationRepository: OperationRepository) =>
         new SearchRecordsUseCase(recordRepository, userRepository, operationRepository),
       inject: [RecordRepository, UserRepository, OperationRepository],
+    },
+    {
+      provide: DeleteRecordUseCase,
+      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository) =>
+        new DeleteRecordUseCase(recordRepository, userRepository),
+      inject: [RecordRepository, UserRepository],
     },
   ],
 })

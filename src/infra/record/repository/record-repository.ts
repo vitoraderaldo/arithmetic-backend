@@ -22,17 +22,31 @@ export class RecordRepository implements RecordRepositoryInterface {
       amount: record.getAmount(),
       userBalance: record.getUserBalance(),
       operationResponse: record.getOperationResponse(),
+      deleted: record.isDeleted(),
       dateCreated: record.getCreatedAt(),
     }
     await this.repo.save(model);
   }
 
-  async search(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>> {
+  async findById(id: string): Promise<Record> {
+    const model = await this.repo.findOne({ where: { id} })
+    if (!model) {
+      throw new Error('Record not found');
+    }
+    return this.mapRecordModelToEntity(model);
+  }
+
+  async deleteById(id: string): Promise<void> {
+   await this.repo.update({ id }, { deleted: true });
+  }
+
+  async searchActive(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>> {
     const [data, total] = await this.repo.findAndCount({
       where: {
         operationId: params.filter.operationId,
         userId: params.filter.userId,
         dateCreated: Between(params.filter.startDate, params.filter.endDate),
+        deleted: false,
       },
       skip: (params.pagination.page - 1) * params.pagination.pageSize,
       take: params.pagination.pageSize,
@@ -54,6 +68,7 @@ export class RecordRepository implements RecordRepositoryInterface {
       model.amount,
       model.userBalance,
       model.operationResponse,
+      model.deleted,
       model.dateCreated,
     );
   }
