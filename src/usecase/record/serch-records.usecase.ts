@@ -15,7 +15,7 @@ export class SearchRecordsUseCase {
   ) {}
 
   public async execute(input: SearchRecordsInputDto): Promise<SearchRecordsOutputDto> {
-    const { filter, pagination } = input;
+    const { filter, pagination, sort } = input;
     const user = await this.userRepository.findByIdentityProviderId(filter.identityProviderId);
     const paginatedResult = await this.recordRepository.searchActive({
       filter: {
@@ -29,8 +29,8 @@ export class SearchRecordsUseCase {
         pageSize: pagination.pageSize,
       },
       sort: {
-        field: 'dateCreated',
-        order: 'DESC',
+        field: sort.field || 'dateCreated',
+        order: sort.order || 'desc',
       }
     });
 

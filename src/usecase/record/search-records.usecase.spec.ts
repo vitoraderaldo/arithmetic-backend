@@ -35,7 +35,8 @@ describe('SearchRecordsUseCase', () => {
         identityProviderId: '123', operationId: 1, 
         startDate: currentDate, endDate: currentDate 
       },
-      pagination: { page: 1, pageSize: 10}
+      pagination: { page: 1, pageSize: 10},
+      sort: { field: 'operationId', order: 'asc' }
     }
 
     const user = new User(1, 'vitor@email.com', 1, 100);

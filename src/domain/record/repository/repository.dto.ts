@@ -10,7 +10,7 @@ export interface RecordSearchRepositoryDto {
     pageSize: number;
   }
   sort: {
-    field: 'dateCreated';
-    order: 'ASC' | 'DESC';
+    field: 'operationId' | 'amount' | 'userBalance' | 'operationResponse' | 'dateCreated'
+    order: 'asc' | 'desc';
   }
 }

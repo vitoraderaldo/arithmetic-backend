@@ -1,5 +1,18 @@
 import { Transform } from "class-transformer"
-import { IsDate } from "class-validator"
+import { IsDate, IsEnum } from "class-validator"
+
+export enum SortDirectionRequest {
+  asc = 'asc',
+  desc = 'desc'
+}
+
+export enum SortOptionRequest {
+  operationId = 'operationId',
+  amount = 'amount',
+  userBalance = 'userBalance',
+  operationResponse = 'operationResponse',
+  dateCreated = 'dateCreated'
+}
 
 export class SearchRecordsRequest {
   
@@ -19,4 +32,10 @@ export class SearchRecordsRequest {
 
   @Transform(({ value }) => Number(value))
   pageSize: number
+
+  @IsEnum(SortOptionRequest)
+  sortBy: SortOptionRequest
+
+  @IsEnum(SortDirectionRequest)
+  sortDirection: SortDirectionRequest
 }

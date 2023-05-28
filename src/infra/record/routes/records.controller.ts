@@ -27,6 +27,10 @@ export class RecordsController {
         startDate: params.startDate,
         endDate: params.endDate,
       },
+      sort: {
+        field: params.sortBy,
+        order: params.sortDirection,
+      },
       pagination: {
         page: params.page,
         pageSize: params.pageSize,

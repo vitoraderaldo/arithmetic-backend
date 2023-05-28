@@ -13,6 +13,10 @@ interface RecordPagination {
 export interface SearchRecordsInputDto {
   filter: RecordFilterOptions
   pagination: RecordPagination
+  sort: {
+    field: 'operationId' | 'amount' | 'userBalance' | 'operationResponse' | 'dateCreated'
+    order: 'asc' | 'desc';
+  }
 }
 
 export interface SearchRecordOutput {

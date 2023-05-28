@@ -3,7 +3,7 @@ import { createMock } from '@golevelup/ts-jest'
 import { RecordsController } from './records.controller';
 import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
 import { AuthGuard } from '../../guards/auth.guard';
-import { SearchRecordsRequest } from './requests/search-records.request';
+import { SearchRecordsRequest, SortDirectionRequest, SortOptionRequest } from './requests/search-records.request';
 import { SearchRecordsOutputDto } from '../../../usecase/record/dto/search-records.dto';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 
@@ -47,7 +47,9 @@ describe('RecordsController', () => {
         startDate: currentDate,
         endDate: currentDate,
         page: 1,
-        pageSize: 10
+        pageSize: 10,
+        sortBy: SortOptionRequest.dateCreated,
+        sortDirection: SortDirectionRequest.asc,
       }
       const identityProviderId = '123';
 
