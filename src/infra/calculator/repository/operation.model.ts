@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { OperationType } from '../../../domain/calculator/operation.types';
+import { ColumnNumericTransformer } from '../../typeorm/column-numeric.transformer';
 
 @Entity('operation')
 export class OperationModel {
@@ -24,6 +25,7 @@ export class OperationModel {
   @Column('decimal', {
     nullable: false,
     name: 'cost',
+    transformer: new ColumnNumericTransformer(),
   })
   cost: number;
 

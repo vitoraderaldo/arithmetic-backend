@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ColumnNumericTransformer } from '../../typeorm/column-numeric.transformer';
 
 @Entity('user')
 export class UserModel {
@@ -23,6 +24,7 @@ export class UserModel {
   @Column('decimal', {
     nullable: false,
     name: 'current_balance',
+    transformer: new ColumnNumericTransformer(),
   })
   currentBalance: number;
 

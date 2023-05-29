@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { ColumnNumericTransformer } from '../../typeorm/column-numeric.transformer';
 
 @Entity('record')
 export class RecordModel {
@@ -23,12 +24,14 @@ export class RecordModel {
   @Column('decimal', {
     nullable: false,
     name: 'amount',
+    transformer: new ColumnNumericTransformer(),
   })
   amount: number;
 
   @Column('decimal', {
     nullable: false,
     name: 'user_balance',
+    transformer: new ColumnNumericTransformer(),
   })
   userBalance: number;
 
