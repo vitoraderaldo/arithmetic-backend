@@ -5,6 +5,7 @@ import { UserRepositoryInterface } from "../../domain/user/repository/user-repos
 import { PaginatedResult } from "../../@shared/interface/paginated-result";
 import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
 import { Operation } from "../../domain/calculator/entity/operation";
+import { DateFilterError } from "../../@shared/error/date-filter.error";
 
 export class SearchRecordsUseCase {
 
@@ -16,6 +17,9 @@ export class SearchRecordsUseCase {
 
   public async execute(input: SearchRecordsInputDto): Promise<SearchRecordsOutputDto> {
     const { filter, pagination, sort } = input;
+    if (filter.startDate.getTime() > filter.endDate.getTime()) {
+      throw new DateFilterError('Start date must be before end date');
+    }
     const user = await this.userRepository.findByIdentityProviderId(filter.identityProviderId);
     const paginatedResult = await this.recordRepository.searchActive({
       filter: {

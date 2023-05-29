@@ -9,6 +9,7 @@ import { Record } from "../../domain/record/entity/record";
 import { Operation } from "../../domain/calculator/entity/operation";
 import { OperationType } from "../../domain/calculator/operation.types";
 import { OperationRepositoryInterface } from "../../domain/calculator/repository/operation-repository.interface";
+import { DateFilterError } from "../../@shared/error/date-filter.error";
 
 describe('SearchRecordsUseCase', () => {
 
@@ -89,6 +90,22 @@ describe('SearchRecordsUseCase', () => {
         userBalance: result.data[1].getUserBalance(),
       },
     ])
+  })
+
+  it('must thorw error when start date is greater than end date', async () => {
+    const currentDate = new Date();
+    const input: SearchRecordsInputDto = {
+      filter: { 
+        identityProviderId: '123', operationId: 1, 
+        startDate: currentDate, endDate: new Date(currentDate.getTime() - 1000) 
+      },
+      pagination: { page: 1, pageSize: 10},
+      sort: { field: 'operationId', order: 'asc' }
+    }
+
+    const response = useCase.execute(input);
+    await expect(response).rejects.toThrowError('Start date must be before end date');
+    await expect(response).rejects.toThrowError(DateFilterError);
   })
 
 });

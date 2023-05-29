@@ -18,6 +18,7 @@ describe('User', () => {
     expect(user.getEmail()).toEqual('email@email.com');
     expect(user.getStatusId()).toEqual(1);
     expect(user.getCurrentBalance()).toEqual(100);
+    expect(user.isActive()).toEqual(true);
   });
 
   it('must spend money successfully', () => {

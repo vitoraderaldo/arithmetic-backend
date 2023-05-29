@@ -74,9 +74,12 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
     },
     {
       provide: UserLogsInUseCase,
-      useFactory: (identityProviderInterface: IdentityProviderInterface) =>
-        new UserLogsInUseCase(identityProviderInterface),
-      inject: ['IdentityProviderInterface'],
+      useFactory: (
+        identityProviderInterface: IdentityProviderInterface,
+        userRepository: UserRepository,
+      ) =>
+        new UserLogsInUseCase(identityProviderInterface, userRepository),
+      inject: ['IdentityProviderInterface', UserRepository],
     },
     {
       provide: SearchRecordsUseCase,

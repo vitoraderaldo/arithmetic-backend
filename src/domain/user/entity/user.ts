@@ -21,10 +21,14 @@ export class User {
     return this.statusId;
   }
 
+  public isActive(): boolean {
+    return this.statusId === 1;
+  }
+
   public getCurrentBalance(): number {
     return this.currentBalance;
   }
-
+  
   public spendMoney(amount: number): void {
     if (amount <= 0) {
       throw new BalanceError('Amount must be greater than 0');
