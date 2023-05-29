@@ -83,6 +83,15 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "coveragePathIgnorePatterns": [
+      "infra/migrations",
+      "infra/user/repository/user.model.ts",
+      "infra/calculator/repository/operation.model.ts",
+      "infra/record/repository/record.model.ts",
+      "infra/app/nest",
+      "infra/environment",
+      "main.ts"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

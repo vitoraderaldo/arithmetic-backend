@@ -58,7 +58,7 @@ export class RecordRepository implements RecordRepositoryInterface {
       },
     });
     return {
-      data: data.map(this.mapRecordModelToEntity),
+      data: data?.map(this.mapRecordModelToEntity),
       total,
     };
   }

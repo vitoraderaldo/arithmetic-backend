@@ -34,7 +34,7 @@ export class OperationRepository implements OperationRepositoryInterface {
 
   async findAll(): Promise<Operation[]> {
     const models = await this.repo.find();
-    return models.map(
+    return models?.map(
       (model) =>
         new Operation(
           model.id,
