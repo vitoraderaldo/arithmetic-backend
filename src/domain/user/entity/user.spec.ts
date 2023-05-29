@@ -1,3 +1,4 @@
+import { BalanceError } from "../error/balance.error";
 import { User } from "./user";
 
 type Props = {
@@ -34,6 +35,7 @@ describe('User', () => {
   ('must not spend money if amount is less than 0', ({amount}: Props) => {
     const spendMoney = () => user.spendMoney(amount);
     expect(spendMoney).toThrowError('Amount must be greater than 0');
+    expect(spendMoney).toThrowError(BalanceError)
   })
 
   it.each`
@@ -43,7 +45,8 @@ describe('User', () => {
     ${1000}
   `('must not spend money if amount is greater than current balance', ({amount}: Props) => {
     const spendMoney = () => user.spendMoney(amount);
-    expect(spendMoney).toThrowError('User balance is not enough');
+    expect(spendMoney).toThrowError(`Your balance is not enough to spend $ ${amount}`);
+    expect(spendMoney).toThrowError(BalanceError)
   })
 
 })

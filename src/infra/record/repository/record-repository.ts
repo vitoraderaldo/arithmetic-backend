@@ -6,6 +6,7 @@ import { RecordModel } from './record.model';
 import { Record } from '../../../domain/record/entity/record';
 import { PaginatedResult } from '../../../@shared/interface/paginated-result';
 import { RecordSearchRepositoryDto } from '../../../domain/record/repository/repository.dto';
+import { RecordNotFound } from '../../../domain/record/error/record-not-found';
 
 @Injectable()
 export class RecordRepository implements RecordRepositoryInterface {
@@ -31,7 +32,7 @@ export class RecordRepository implements RecordRepositoryInterface {
   async findById(id: string): Promise<Record> {
     const model = await this.repo.findOne({ where: { id} })
     if (!model) {
-      throw new Error('Record not found');
+      throw new RecordNotFound(`Record not found with id ${id}`);
     }
     return this.mapRecordModelToEntity(model);
   }

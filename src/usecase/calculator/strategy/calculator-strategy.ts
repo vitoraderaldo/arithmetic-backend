@@ -1,3 +1,4 @@
+import { UnknownOperation } from "../../../domain/calculator/error/operation-not-found";
 import { OperationType } from "../../../domain/calculator/operation.types";
 import { RandomStringService } from "../operations/random-string.service";
 import { CalculatorInterface } from "./calculator.interface";
@@ -24,7 +25,7 @@ export class CalculatorStrategy {
       case OperationType.RANDOM_STRING:
         return this.randomStringService.randomString()
       default:
-        throw new Error('Operation not implemented')
+        throw new UnknownOperation(`Operation ${operation} not implemented`)
     }
   }
 }

@@ -8,6 +8,7 @@ import { OperationRepositoryInterface } from "../../domain/calculator/repository
 import { User } from "../../domain/user/entity/user";
 import { Operation } from "../../domain/calculator/entity/operation";
 import { RecordRepositoryInterface } from "../../domain/record/repository/record-repository.interface";
+import { BalanceError } from "../../domain/user/error/balance.error";
 
 describe('Calculate Use Case', () => {
 
@@ -88,7 +89,8 @@ describe('Calculate Use Case', () => {
     const createRecordSpy = jest.spyOn(recordRepository, 'create');
 
     const output = calculateUseCase.execute(input);
-    await expect(output).rejects.toThrowError('User balance is not enough');
+    await expect(output).rejects.toThrowError('Your balance is not enough to spend $ 5.1');
+    await expect(output).rejects.toThrowError(BalanceError)
     expect(user.getCurrentBalance()).toEqual(5);
     expect(updateBalanceSpy).not.toHaveBeenCalled();
     expect(createRecordSpy).not.toHaveBeenCalled();

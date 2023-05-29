@@ -3,6 +3,7 @@ import { UserLogsInUseCase } from "./user-login.case";
 import { IdentityProviderInterface } from "../../domain/user/repository/identity-provider.interface";
 import { UserLoginInputDto } from "./user-login.dto";
 import { IdentityLoginOutputDto } from "../../domain/user/repository/identity-login.dto";
+import { InvalidCredentials } from "../../domain/user/error/invalid-credentials.error";
 
 describe('User Login', () => {
 
@@ -40,6 +41,22 @@ describe('User Login', () => {
 
     const response = await useCase.execute(credentials);
     expect(response).toEqual(loginResponse);
+  })
+
+  it('must throw InvalidCrendetials when an error happens', async () => {
+    const anyError = new Error('Cognito is down');
+    const credentials: UserLoginInputDto = {
+      email: 'user@email.com',
+      password: '1234',
+    };
+
+    jest
+      .spyOn(identityProvider, 'login')
+      .mockRejectedValue(anyError);
+
+    const response = useCase.execute(credentials);
+    await expect(response).rejects.toThrowError('Invalid credentials');
+    await expect(response).rejects.toThrowError(InvalidCredentials);
   })
   
 })

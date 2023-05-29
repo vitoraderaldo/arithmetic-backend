@@ -4,6 +4,7 @@ import { UserRepositoryInterface } from "../../domain/user/repository/user-repos
 import { DeleteRecordUseCase } from "./delete-record.usecase";
 import { User } from '../../domain/user/entity/user'
 import { Record } from "../../domain/record/entity/record";
+import { RecordNotFound } from "../../domain/record/error/record-not-found";
 
 describe('Delete Record UseCase', () => {
 
@@ -83,6 +84,7 @@ describe('Delete Record UseCase', () => {
     
     const response = useCase.execute(input);
     expect(response).rejects.toThrow('Invalid record');
+    expect(response).rejects.toThrow(RecordNotFound);
     expect(deleteRecordSpy).not.toHaveBeenCalled()
   });
 

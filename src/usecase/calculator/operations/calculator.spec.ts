@@ -1,3 +1,4 @@
+import { InvalidArgument } from "../../../domain/calculator/error/invalid-argument";
 import { Calculator } from "./calculator";
 
 type Props = {
@@ -77,6 +78,18 @@ describe('Calculator', () => {
     const response = calculator.randomString();
     expect(response).toBeDefined();
     expect(response.length).toBeGreaterThan(1)
+  })
+
+  it('must throw error when square root of negative number', () => {
+    const squareRoot = () => calculator.squareRoot(-1)
+    expect(squareRoot).toThrowError(InvalidArgument);
+    expect(squareRoot).toThrowError('Can not calculate square root of negative numbers');
+  })
+
+  it('must throw error when division by zero', () => {
+    const division = () => calculator.division(1, 0)
+    expect(division).toThrowError(InvalidArgument);
+    expect(division).toThrowError('Can not divide by zero');
   })
 
 

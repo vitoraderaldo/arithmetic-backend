@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UserRepositoryInterface } from '../../../domain/user/repository/user-repository.interface';
 import { UserModel } from './user.model';
 import { User } from '../../../domain/user/entity/user';
+import { UserNotFound } from '../../../domain/user/error/user-not-found';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -18,7 +19,7 @@ export class UserRepository implements UserRepositoryInterface {
     }});
 
     if (!userModel?.id) {
-      throw new Error('User not found')
+      throw new UserNotFound()
     }
     return new User(userModel.id, userModel.email, userModel.statusId, userModel.currentBalance);
   }

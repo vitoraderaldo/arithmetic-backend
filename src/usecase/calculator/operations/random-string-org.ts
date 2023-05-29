@@ -9,7 +9,7 @@ export class RandomStringOrg implements RandomStringInterface {
 
     private BASE_URL = 'https://random.org'
     private RANDOM_STRING_CONFIG = {
-      num: 1,
+      num: 8,
       len: 1,
       digits: 'on',
       upperalpha: 'on',

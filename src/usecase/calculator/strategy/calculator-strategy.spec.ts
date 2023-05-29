@@ -3,6 +3,7 @@ import { CalculatorStrategy } from "./calculator-strategy";
 import { OperationType } from "../../../domain/calculator/operation.types";
 import { CalculatorInterface } from "./calculator.interface";
 import { RandomStringService } from "../operations/random-string.service";
+import { UnknownOperation } from "../../../domain/calculator/error/operation-not-found";
 
 type Props = {
   operation: OperationType;
@@ -60,6 +61,15 @@ describe('Calculator Strategy', () => {
 
       const response = await calculatorStrategy.calculate(OperationType.RANDOM_STRING);
       expect(response).toEqual(randomString);
+    })
+  })
+
+  describe('Unknown operation', () => {
+    it('must throw an error', () => {
+      const operation = 'unknown-operation' as OperationType;
+      const calculate = () => calculatorStrategy.calculate(operation);
+      expect(calculate).toThrowError(`Operation unknown-operation not implemented`);
+      expect(calculate).toThrowError(UnknownOperation);
     })
   })
 

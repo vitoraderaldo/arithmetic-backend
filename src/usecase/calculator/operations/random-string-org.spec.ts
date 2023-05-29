@@ -30,7 +30,7 @@ describe('Random String Org', () => {
     const result = await randomStringOrg.randomString();
     expect(result).toEqual(randomString);
     expect(getSpy).toHaveBeenCalledTimes(1);
-    expect(getSpy).toHaveBeenCalledWith('https://random.org/strings/?num=1&len=1&digits=on&upperalpha=on&loweralpha=on&format=plain');
+    expect(getSpy).toHaveBeenCalledWith('https://random.org/strings/?num=8&len=1&digits=on&upperalpha=on&loweralpha=on&format=plain');
   })
 
 })

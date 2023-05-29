@@ -5,6 +5,7 @@ import { OperationRepositoryInterface } from '../../../domain/calculator/reposit
 import { OperationModel } from './operation.model';
 import { Operation } from '../../../domain/calculator/entity/operation';
 import { OperationType } from '../../../domain/calculator/operation.types';
+import { UnknownOperation } from '../../../domain/calculator/error/operation-not-found';
 
 @Injectable()
 export class OperationRepository implements OperationRepositoryInterface {
@@ -18,7 +19,7 @@ export class OperationRepository implements OperationRepositoryInterface {
       type
     }});
     if (!operation?.id) {
-      throw new Error('Operation not found')
+      throw new UnknownOperation(`Operation not found with type: ${type}`)
     }
     return new Operation(operation.id, operation.type, operation.name, operation.cost, operation.inputsRequired);
   } 

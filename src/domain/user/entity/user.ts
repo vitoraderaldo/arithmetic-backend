@@ -1,3 +1,5 @@
+import { BalanceError } from "../error/balance.error";
+
 export class User {
 
   constructor(
@@ -25,10 +27,10 @@ export class User {
 
   public spendMoney(amount: number): void {
     if (amount <= 0) {
-      throw new Error('Amount must be greater than 0');
+      throw new BalanceError('Amount must be greater than 0');
     }
     if (amount > this.currentBalance) {
-      throw new Error('User balance is not enough');
+      throw new BalanceError(`Your balance is not enough to spend $ ${amount}`);
     }
     this.currentBalance -= amount;
   }
