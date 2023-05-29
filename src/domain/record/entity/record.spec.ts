@@ -1,16 +1,21 @@
-import { Operation } from "../../calculator/entity/operation";
-import { OperationType } from "../../calculator/operation.types";
-import { User } from "../../user/entity/user";
-import { Record } from "./record";
+import { Operation } from '../../calculator/entity/operation';
+import { OperationType } from '../../calculator/operation.types';
+import { User } from '../../user/entity/user';
+import { Record } from './record';
 
 describe('Record', () => {
-
   describe('Create new Record', () => {
     it('must create a new record successfully', () => {
       const user = new User(1, 'email@email.com', 1, 100);
-      const operation = new Operation(1, OperationType.ADDITION, 'Addition', 10, 2);
+      const operation = new Operation(
+        1,
+        OperationType.ADDITION,
+        'Addition',
+        10,
+        2,
+      );
       const result = '10';
-      
+
       const record = Record.createNewRecord(user, operation, result);
       expect(record.getId()).toBeDefined();
       expect(record.getOperationId()).toBe(operation.getId());
@@ -20,8 +25,8 @@ describe('Record', () => {
       expect(record.getOperationResponse()).toBe(result);
       expect(record.isDeleted()).toBe(false);
       expect(record.getCreatedAt()).toBeDefined();
-    })
-  })
+    });
+  });
 
   describe('Create from existing record', () => {
     it('must create from existing data', () => {
@@ -33,7 +38,16 @@ describe('Record', () => {
       const operationResponse = '10';
       const createdAt = new Date();
 
-      const record = Record.createFromExistingRecord(id, operationId, userId, amount, userBalance, operationResponse, false, createdAt);
+      const record = Record.createFromExistingRecord(
+        id,
+        operationId,
+        userId,
+        amount,
+        userBalance,
+        operationResponse,
+        false,
+        createdAt,
+      );
       expect(record.getId()).toBe(id);
       expect(record.getOperationId()).toBe(operationId);
       expect(record.getUserId()).toBe(userId);
@@ -42,7 +56,6 @@ describe('Record', () => {
       expect(record.getOperationResponse()).toBe(operationResponse);
       expect(record.isDeleted()).toBe(false);
       expect(record.getCreatedAt()).toBe(createdAt);
-    })
-  })
-
-})
+    });
+  });
+});

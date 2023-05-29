@@ -16,10 +16,11 @@ import { NestConfigService } from '../../environment/nest-config.service';
     },
     {
       provide: 'EnvironmentConfigInterface',
-      useFactory: (configService: ConfigService) => new NestConfigService(configService),
+      useFactory: (configService: ConfigService) =>
+        new NestConfigService(configService),
       inject: [ConfigService],
     },
   ],
-  exports: ['EnvironmentConfigInterface']
+  exports: ['EnvironmentConfigInterface'],
 })
 export class ConfModule {}

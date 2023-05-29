@@ -1,9 +1,9 @@
-import { Transform } from "class-transformer"
-import { IsDate, IsEnum } from "class-validator"
+import { Transform } from 'class-transformer';
+import { IsDate, IsEnum } from 'class-validator';
 
 export enum SortDirectionRequest {
   asc = 'asc',
-  desc = 'desc'
+  desc = 'desc',
 }
 
 export enum SortOptionRequest {
@@ -11,31 +11,30 @@ export enum SortOptionRequest {
   amount = 'amount',
   userBalance = 'userBalance',
   operationResponse = 'operationResponse',
-  dateCreated = 'dateCreated'
+  dateCreated = 'dateCreated',
 }
 
 export class SearchRecordsRequest {
-  
   @Transform(({ value }) => Number(value))
-  operationId: number
+  operationId: number;
 
   @Transform(({ value }) => new Date(value))
   @IsDate()
-  startDate: Date
+  startDate: Date;
 
   @Transform(({ value }) => new Date(value))
   @IsDate()
-  endDate: Date
+  endDate: Date;
 
   @Transform(({ value }) => Number(value))
-  page: number
+  page: number;
 
   @Transform(({ value }) => Number(value))
-  pageSize: number
+  pageSize: number;
 
   @IsEnum(SortOptionRequest)
-  sortBy: SortOptionRequest
+  sortBy: SortOptionRequest;
 
   @IsEnum(SortDirectionRequest)
-  sortDirection: SortDirectionRequest
+  sortDirection: SortDirectionRequest;
 }

@@ -1,3 +1,3 @@
-import { bootstrap } from "./infra/app/nest/bootstrap";
+import { bootstrap } from './infra/app/nest/bootstrap';
 
 bootstrap();

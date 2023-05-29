@@ -46,5 +46,4 @@ export class OperationModel {
     name: 'date_modified',
   })
   dateModified: Date;
-
 }

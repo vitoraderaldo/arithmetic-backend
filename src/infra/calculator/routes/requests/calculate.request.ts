@@ -1,4 +1,10 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsNotEmpty, IsNumber } from "class-validator"
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+} from 'class-validator';
 
 class CalculateNumbersRequest {
   @IsArray()
@@ -6,7 +12,7 @@ class CalculateNumbersRequest {
   @ArrayMinSize(1)
   @ArrayMaxSize(2)
   @IsNumber({}, { each: true })
-  arguments: number[]
+  arguments: number[];
 }
 
 export class CalculateSquareRootRequest {
@@ -15,7 +21,7 @@ export class CalculateSquareRootRequest {
   @ArrayMinSize(1)
   @ArrayMaxSize(1)
   @IsNumber({}, { each: true })
-  arguments: number[]
+  arguments: number[];
 }
 
 export class CalculateAdditionRequest extends CalculateNumbersRequest {}

@@ -1,9 +1,8 @@
-import { v4 as uuid } from "uuid";
-import { Operation } from "../../calculator/entity/operation";
-import { User } from "../../user/entity/user";
+import { v4 as uuid } from 'uuid';
+import { Operation } from '../../calculator/entity/operation';
+import { User } from '../../user/entity/user';
 
 export class Record {
-
   private constructor(
     private readonly id: string,
     private readonly operationId: number,
@@ -15,12 +14,43 @@ export class Record {
     private readonly createdAt: Date,
   ) {}
 
-  public static createNewRecord(user: User, operation: Operation, result: string) {
-    return new Record(uuid(), operation.getId(), user.getId(), operation.getCost(), user.getCurrentBalance(), result, false, new Date())
+  public static createNewRecord(
+    user: User,
+    operation: Operation,
+    result: string,
+  ) {
+    return new Record(
+      uuid(),
+      operation.getId(),
+      user.getId(),
+      operation.getCost(),
+      user.getCurrentBalance(),
+      result,
+      false,
+      new Date(),
+    );
   }
 
-  public static createFromExistingRecord(id: string, operationId: number, userId: number, amount: number, userBalance: number, operationResponse: string, isDeleted: boolean, createdAt: Date) {
-    return new Record(id, operationId, userId, amount, userBalance, operationResponse, isDeleted, createdAt)
+  public static createFromExistingRecord(
+    id: string,
+    operationId: number,
+    userId: number,
+    amount: number,
+    userBalance: number,
+    operationResponse: string,
+    isDeleted: boolean,
+    createdAt: Date,
+  ) {
+    return new Record(
+      id,
+      operationId,
+      userId,
+      amount,
+      userBalance,
+      operationResponse,
+      isDeleted,
+      createdAt,
+    );
   }
 
   public getId(): string {
@@ -58,5 +88,4 @@ export class Record {
   public deleteRecord(): void {
     this.deleted = true;
   }
-
 }

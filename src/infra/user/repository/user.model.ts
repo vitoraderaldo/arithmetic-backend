@@ -45,5 +45,4 @@ export class UserModel {
     name: 'date_modified',
   })
   dateModified: Date;
-
 }

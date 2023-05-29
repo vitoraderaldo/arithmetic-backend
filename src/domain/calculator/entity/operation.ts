@@ -1,7 +1,6 @@
-import { OperationType } from "../operation.types";
+import { OperationType } from '../operation.types';
 
 export class Operation {
-
   constructor(
     private id: number,
     private type: OperationType,
@@ -29,5 +28,4 @@ export class Operation {
   getInputsRequired(): number {
     return this.inputsRequired;
   }
-
 }

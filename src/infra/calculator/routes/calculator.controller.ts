@@ -1,12 +1,18 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { CalculateOutputDto } from "../../../usecase/calculator/dto/calculate.dto";
-import { CalculateUseCase } from "../../../usecase/calculator/calculate.usecase";
-import { CalculateAdditionRequest, CalculateDivisionRequest, CalculateMultiplicationRequest, CalculateSquareRootRequest, CalculateSubtractionRequest } from "./requests/calculate.request";
-import { OperationType } from "../../../domain/calculator/operation.types";
-import { AuthGuard } from "../../guards/auth.guard";
-import { IdentityProviderId } from "../../guards/identity-provider-id.decorator";
-import { FindOperationsUseCase } from "../../../usecase/calculator/find-operations.usecase";
-import { FindOperationsOutputDto } from "../../../usecase/calculator/dto/operation.dto";
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { CalculateOutputDto } from '../../../usecase/calculator/dto/calculate.dto';
+import { CalculateUseCase } from '../../../usecase/calculator/calculate.usecase';
+import {
+  CalculateAdditionRequest,
+  CalculateDivisionRequest,
+  CalculateMultiplicationRequest,
+  CalculateSquareRootRequest,
+  CalculateSubtractionRequest,
+} from './requests/calculate.request';
+import { OperationType } from '../../../domain/calculator/operation.types';
+import { AuthGuard } from '../../guards/auth.guard';
+import { IdentityProviderId } from '../../guards/identity-provider-id.decorator';
+import { FindOperationsUseCase } from '../../../usecase/calculator/find-operations.usecase';
+import { FindOperationsOutputDto } from '../../../usecase/calculator/dto/operation.dto';
 
 @UseGuards(AuthGuard)
 @Controller('/calculator')
@@ -24,7 +30,7 @@ export class CalculatorController {
   @Post('/addition')
   public addNumbers(
     @IdentityProviderId() identityProviderId: string,
-    @Body() body: CalculateAdditionRequest
+    @Body() body: CalculateAdditionRequest,
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
@@ -36,7 +42,7 @@ export class CalculatorController {
   @Post('/subtraction')
   public subtractNumbers(
     @IdentityProviderId() identityProviderId: string,
-    @Body() body: CalculateSubtractionRequest
+    @Body() body: CalculateSubtractionRequest,
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
@@ -48,7 +54,7 @@ export class CalculatorController {
   @Post('/multiplication')
   public multiplyNumbers(
     @IdentityProviderId() identityProviderId: string,
-    @Body() body: CalculateMultiplicationRequest
+    @Body() body: CalculateMultiplicationRequest,
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
@@ -60,7 +66,7 @@ export class CalculatorController {
   @Post('/division')
   public divideNumbers(
     @IdentityProviderId() identityProviderId: string,
-    @Body() body: CalculateDivisionRequest
+    @Body() body: CalculateDivisionRequest,
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
@@ -72,7 +78,7 @@ export class CalculatorController {
   @Post('/square-root')
   public calculateSquareRoot(
     @IdentityProviderId() identityProviderId: string,
-    @Body() body: CalculateSquareRootRequest
+    @Body() body: CalculateSquareRootRequest,
   ): Promise<CalculateOutputDto> {
     return this.calculateUseCase.execute({
       identityProviderId,
@@ -91,5 +97,4 @@ export class CalculatorController {
       arguments: [],
     });
   }
-
 }

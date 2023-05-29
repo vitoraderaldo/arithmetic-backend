@@ -1,8 +1,7 @@
 import { InvalidArgument } from '../../../domain/calculator/error/invalid-argument';
-import { CalculatorInterface } from '../strategy/calculator.interface'
+import { CalculatorInterface } from '../strategy/calculator.interface';
 
 export class Calculator implements CalculatorInterface {
-
   public addition(a: number, b: number): number {
     return a + b;
   }
@@ -17,14 +16,16 @@ export class Calculator implements CalculatorInterface {
 
   public division(a: number, b: number): number {
     if (b == 0) {
-      throw new InvalidArgument('Can not divide by zero')
+      throw new InvalidArgument('Can not divide by zero');
     }
     return a / b;
   }
 
   public squareRoot(a: number): number {
-    if ( a < 0 ) {
-      throw new InvalidArgument('Can not calculate square root of negative numbers')
+    if (a < 0) {
+      throw new InvalidArgument(
+        'Can not calculate square root of negative numbers',
+      );
     }
     return Math.sqrt(a);
   }
@@ -32,5 +33,4 @@ export class Calculator implements CalculatorInterface {
   public randomString(): string {
     return 'oi';
   }
-
 }

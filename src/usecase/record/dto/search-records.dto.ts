@@ -1,5 +1,5 @@
 export interface RecordFilterOptions {
-  identityProviderId: string
+  identityProviderId: string;
   operationId: number;
   startDate: Date;
   endDate: Date;
@@ -11,12 +11,17 @@ interface RecordPagination {
 }
 
 export interface SearchRecordsInputDto {
-  filter: RecordFilterOptions
-  pagination: RecordPagination
+  filter: RecordFilterOptions;
+  pagination: RecordPagination;
   sort: {
-    field: 'operationId' | 'amount' | 'userBalance' | 'operationResponse' | 'dateCreated'
+    field:
+      | 'operationId'
+      | 'amount'
+      | 'userBalance'
+      | 'operationResponse'
+      | 'dateCreated';
     order: 'asc' | 'desc';
-  }
+  };
 }
 
 export interface SearchRecordOutput {
@@ -29,11 +34,11 @@ export interface SearchRecordOutput {
 }
 
 export interface SearchRecordsOutputDto {
-  records: SearchRecordOutput[]
+  records: SearchRecordOutput[];
   pagination: {
     page: number;
     pageSize: number;
     pageTotal: number;
     total: number;
-  }
+  };
 }

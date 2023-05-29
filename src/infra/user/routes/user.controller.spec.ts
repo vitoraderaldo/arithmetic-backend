@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { createMock } from '@golevelup/ts-jest'
+import { createMock } from '@golevelup/ts-jest';
 import { UserController } from './user.controller';
 import { UserLogsInUseCase } from '../../../usecase/user/user-login.case';
 import { UserLoginOutputDto } from '../../../usecase/user/user-login.dto';
@@ -15,7 +15,7 @@ describe('UserController', () => {
         {
           provide: UserLogsInUseCase,
           useValue: createMock<UserLogsInUseCase>(),
-        }
+        },
       ],
     }).compile();
 
@@ -33,7 +33,7 @@ describe('UserController', () => {
         accessToken: 'access-token',
         refreshToken: 'refresh-token',
         expirensInSeconds: 3600,
-      }
+      };
       jest.spyOn(userLogsInUseCase, 'execute').mockResolvedValue(tokenResponse);
 
       const response = await userController.login({
@@ -41,7 +41,6 @@ describe('UserController', () => {
         password: 'password123',
       });
       expect(response).toEqual(tokenResponse);
-    })
-   
+    });
   });
 });

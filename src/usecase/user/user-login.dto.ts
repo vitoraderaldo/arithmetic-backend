@@ -5,6 +5,6 @@ export interface UserLoginInputDto {
 
 export interface UserLoginOutputDto {
   accessToken: string;
-  refreshToken: string,
-  expirensInSeconds: number
+  refreshToken: string;
+  expirensInSeconds: number;
 }

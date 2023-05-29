@@ -1,16 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { createMock } from '@golevelup/ts-jest'
+import { createMock } from '@golevelup/ts-jest';
 import { RecordsController } from './records.controller';
 import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
 import { AuthGuard } from '../../guards/auth.guard';
-import { SearchRecordsRequest, SortDirectionRequest, SortOptionRequest } from './requests/search-records.request';
+import {
+  SearchRecordsRequest,
+  SortDirectionRequest,
+  SortOptionRequest,
+} from './requests/search-records.request';
 import { SearchRecordsOutputDto } from '../../../usecase/record/dto/search-records.dto';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 
 describe('RecordsController', () => {
   let controller: RecordsController;
   let searchRecordsUseCase: SearchRecordsUseCase;
-  let deleteRecordUseCase: DeleteRecordUseCase
+  let deleteRecordUseCase: DeleteRecordUseCase;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -23,12 +27,12 @@ describe('RecordsController', () => {
         {
           provide: DeleteRecordUseCase,
           useValue: createMock<DeleteRecordUseCase>(),
-        }
+        },
       ],
     })
-    .overrideGuard(AuthGuard)
-    .useValue(createMock<AuthGuard>())
-    .compile();
+      .overrideGuard(AuthGuard)
+      .useValue(createMock<AuthGuard>())
+      .compile();
 
     controller = app.get<RecordsController>(RecordsController);
     searchRecordsUseCase = app.get<SearchRecordsUseCase>(SearchRecordsUseCase);
@@ -50,7 +54,7 @@ describe('RecordsController', () => {
         pageSize: 10,
         sortBy: SortOptionRequest.dateCreated,
         sortDirection: SortDirectionRequest.asc,
-      }
+      };
       const identityProviderId = '123';
 
       const result: SearchRecordsOutputDto = {
@@ -60,14 +64,15 @@ describe('RecordsController', () => {
           pageSize: 10,
           pageTotal: 0,
           total: 0,
-        }
-      }
+        },
+      };
 
-      jest
-        .spyOn(searchRecordsUseCase, 'execute')
-        .mockResolvedValue(result);
+      jest.spyOn(searchRecordsUseCase, 'execute').mockResolvedValue(result);
 
-      const response = await controller.searchRecords(params, identityProviderId);
+      const response = await controller.searchRecords(
+        params,
+        identityProviderId,
+      );
       expect(response).toEqual(result);
     });
   });
@@ -77,14 +82,15 @@ describe('RecordsController', () => {
       const recordId = '1';
       const identityProviderId = '123';
 
-      const result = { recordId: recordId }
+      const result = { recordId: recordId };
 
-      jest
-        .spyOn(deleteRecordUseCase, 'execute')
-        .mockResolvedValue(result);
+      jest.spyOn(deleteRecordUseCase, 'execute').mockResolvedValue(result);
 
-      const response = await controller.deleteRecord(recordId, identityProviderId);
-      expect(response).toEqual(result)
+      const response = await controller.deleteRecord(
+        recordId,
+        identityProviderId,
+      );
+      expect(response).toEqual(result);
     });
-  })
+  });
 });

@@ -1,4 +1,4 @@
-import { DefaultError } from "./default.error";
+import { DefaultError } from './default.error';
 
 export class DateFilterError extends DefaultError {
   constructor(message: string) {

@@ -1,10 +1,12 @@
-import { PaginatedResult } from '../../../@shared/interface/paginated-result'
-import { Record } from '../entity/record'
-import { RecordSearchRepositoryDto } from './repository.dto'
+import { PaginatedResult } from '../../../@shared/interface/paginated-result';
+import { Record } from '../entity/record';
+import { RecordSearchRepositoryDto } from './repository.dto';
 
 export interface RecordRepositoryInterface {
-  create(record: Record): Promise<void>
-  searchActive(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>>
-  findById(id: string): Promise<Record>
-  deleteById(id: string): Promise<void>
+  create(record: Record): Promise<void>;
+  searchActive(
+    params: RecordSearchRepositoryDto,
+  ): Promise<PaginatedResult<Record>>;
+  findById(id: string): Promise<Record>;
+  deleteById(id: string): Promise<void>;
 }

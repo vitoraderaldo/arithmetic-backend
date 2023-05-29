@@ -26,8 +26,13 @@ import { HtppClient } from '../../../@shared/interface/http-client.interface';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 
 @Module({
-  imports: [ ConfModule, DatabaseModule ],
-  controllers: [ UserController, CalculatorController, HealthCheckController, RecordsController],
+  imports: [ConfModule, DatabaseModule],
+  controllers: [
+    UserController,
+    CalculatorController,
+    HealthCheckController,
+    RecordsController,
+  ],
   providers: [
     {
       provide: 'CalculatorInterface',
@@ -44,17 +49,22 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
     },
     {
       provide: RandomStringService,
-      useFactory: (randomStringInterface: RandomStringInterface) => new RandomStringService(randomStringInterface),
+      useFactory: (randomStringInterface: RandomStringInterface) =>
+        new RandomStringService(randomStringInterface),
       inject: ['RandomStringInterface'],
     },
     {
       provide: CalculatorStrategy,
-      useFactory: (calculator: CalculatorInterface, randomStringService: RandomStringService) => new CalculatorStrategy(calculator, randomStringService),
+      useFactory: (
+        calculator: CalculatorInterface,
+        randomStringService: RandomStringService,
+      ) => new CalculatorStrategy(calculator, randomStringService),
       inject: ['CalculatorInterface', RandomStringService],
     },
     {
       provide: FindOperationsUseCase,
-      useFactory: (operationRepository: OperationRepository)  => new FindOperationsUseCase(operationRepository),
+      useFactory: (operationRepository: OperationRepository) =>
+        new FindOperationsUseCase(operationRepository),
       inject: [OperationRepository],
     },
     {
@@ -64,12 +74,24 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
         userRepository: UserRepository,
         operationRepository: OperationRepository,
         recordRepository: RecordRepository,
-      ) => new CalculateUseCase(calculatorStrategy, userRepository, operationRepository, recordRepository),
-      inject: [CalculatorStrategy, UserRepository, OperationRepository, RecordRepository],
+      ) =>
+        new CalculateUseCase(
+          calculatorStrategy,
+          userRepository,
+          operationRepository,
+          recordRepository,
+        ),
+      inject: [
+        CalculatorStrategy,
+        UserRepository,
+        OperationRepository,
+        RecordRepository,
+      ],
     },
     {
       provide: 'IdentityProviderInterface',
-      useFactory: (environmentConfigInterface: EnvironmentConfigInterface) => new CognitoIdentityProviderService(environmentConfigInterface),
+      useFactory: (environmentConfigInterface: EnvironmentConfigInterface) =>
+        new CognitoIdentityProviderService(environmentConfigInterface),
       inject: ['EnvironmentConfigInterface'],
     },
     {
@@ -77,23 +99,31 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
       useFactory: (
         identityProviderInterface: IdentityProviderInterface,
         userRepository: UserRepository,
-      ) =>
-        new UserLogsInUseCase(identityProviderInterface, userRepository),
+      ) => new UserLogsInUseCase(identityProviderInterface, userRepository),
       inject: ['IdentityProviderInterface', UserRepository],
     },
     {
       provide: SearchRecordsUseCase,
-      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository, operationRepository: OperationRepository) =>
-        new SearchRecordsUseCase(recordRepository, userRepository, operationRepository),
+      useFactory: (
+        recordRepository: RecordRepository,
+        userRepository: UserRepository,
+        operationRepository: OperationRepository,
+      ) =>
+        new SearchRecordsUseCase(
+          recordRepository,
+          userRepository,
+          operationRepository,
+        ),
       inject: [RecordRepository, UserRepository, OperationRepository],
     },
     {
       provide: DeleteRecordUseCase,
-      useFactory: (recordRepository: RecordRepository, userRepository: UserRepository) =>
-        new DeleteRecordUseCase(recordRepository, userRepository),
+      useFactory: (
+        recordRepository: RecordRepository,
+        userRepository: UserRepository,
+      ) => new DeleteRecordUseCase(recordRepository, userRepository),
       inject: [RecordRepository, UserRepository],
     },
   ],
 })
-
 export class AppModule {}

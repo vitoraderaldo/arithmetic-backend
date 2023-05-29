@@ -12,8 +12,10 @@ import { DefaultError } from '../../../../@shared/error/default.error';
 const INTERNAL_SERVER_ERROR_MESSAGE = 'Internal server error';
 
 function stringifyError(errors: string[]): string {
-  const capitalizedErrors = errors.map(value => value.charAt(0).toUpperCase() + value.slice(1));
-  return capitalizedErrors.join(', '); 
+  const capitalizedErrors = errors.map(
+    (value) => value.charAt(0).toUpperCase() + value.slice(1),
+  );
+  return capitalizedErrors.join(', ');
 }
 
 @Injectable()
@@ -39,11 +41,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof BadRequestException) {
       statusCode = exception.getStatus();
-      message = stringifyError(exception.getResponse()['message'])
+      message = stringifyError(exception.getResponse()['message']);
     }
 
     console.error(exception);
-    
+
     response.status(statusCode).json({
       statusCode,
       message,

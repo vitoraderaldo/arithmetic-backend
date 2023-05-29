@@ -25,12 +25,12 @@ export class RecordRepository implements RecordRepositoryInterface {
       operationResponse: record.getOperationResponse(),
       deleted: record.isDeleted(),
       dateCreated: record.getCreatedAt(),
-    }
+    };
     await this.repo.save(model);
   }
 
   async findById(id: string): Promise<Record> {
-    const model = await this.repo.findOne({ where: { id} })
+    const model = await this.repo.findOne({ where: { id } });
     if (!model) {
       throw new RecordNotFound(`Record not found with id ${id}`);
     }
@@ -38,10 +38,12 @@ export class RecordRepository implements RecordRepositoryInterface {
   }
 
   async deleteById(id: string): Promise<void> {
-   await this.repo.update({ id }, { deleted: true });
+    await this.repo.update({ id }, { deleted: true });
   }
 
-  async searchActive(params: RecordSearchRepositoryDto): Promise<PaginatedResult<Record>> {
+  async searchActive(
+    params: RecordSearchRepositoryDto,
+  ): Promise<PaginatedResult<Record>> {
     const [data, total] = await this.repo.findAndCount({
       where: {
         operationId: params.filter.operationId,
@@ -53,12 +55,12 @@ export class RecordRepository implements RecordRepositoryInterface {
       take: params.pagination.pageSize,
       order: {
         [params.sort.field]: params.sort.order,
-      }
+      },
     });
     return {
       data: data.map(this.mapRecordModelToEntity),
       total,
-    }
+    };
   }
 
   private mapRecordModelToEntity(model: RecordModel): Record {
@@ -73,5 +75,4 @@ export class RecordRepository implements RecordRepositoryInterface {
       model.dateCreated,
     );
   }
-
 }

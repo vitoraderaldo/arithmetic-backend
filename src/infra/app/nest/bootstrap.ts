@@ -9,4 +9,4 @@ export const bootstrap = async (): Promise<void> => {
   app.useGlobalFilters(new AllExceptionsFilter());
   app.enableCors();
   await app.listen(80);
-}
+};

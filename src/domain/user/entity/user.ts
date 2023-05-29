@@ -1,7 +1,6 @@
-import { BalanceError } from "../error/balance.error";
+import { BalanceError } from '../error/balance.error';
 
 export class User {
-
   constructor(
     private id: number,
     private email: string,
@@ -28,7 +27,7 @@ export class User {
   public getCurrentBalance(): number {
     return this.currentBalance;
   }
-  
+
   public spendMoney(amount: number): void {
     if (amount <= 0) {
       throw new BalanceError('Amount must be greater than 0');
@@ -38,5 +37,4 @@ export class User {
     }
     this.currentBalance -= amount;
   }
-
 }

@@ -15,17 +15,34 @@ export class OperationRepository implements OperationRepositoryInterface {
   ) {}
 
   async findByType(type: OperationType): Promise<Operation> {
-    const operation = await this.repo.findOne({ where: {
-      type
-    }});
+    const operation = await this.repo.findOne({
+      where: {
+        type,
+      },
+    });
     if (!operation?.id) {
-      throw new UnknownOperation(`Operation not found with type: ${type}`)
+      throw new UnknownOperation(`Operation not found with type: ${type}`);
     }
-    return new Operation(operation.id, operation.type, operation.name, operation.cost, operation.inputsRequired);
-  } 
-  
+    return new Operation(
+      operation.id,
+      operation.type,
+      operation.name,
+      operation.cost,
+      operation.inputsRequired,
+    );
+  }
+
   async findAll(): Promise<Operation[]> {
     const models = await this.repo.find();
-    return models.map(model => new Operation(model.id, model.type, model.name, model.cost, model.inputsRequired));
+    return models.map(
+      (model) =>
+        new Operation(
+          model.id,
+          model.type,
+          model.name,
+          model.cost,
+          model.inputsRequired,
+        ),
+    );
   }
 }

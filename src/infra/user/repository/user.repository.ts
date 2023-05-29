@@ -14,26 +14,39 @@ export class UserRepository implements UserRepositoryInterface {
   ) {}
 
   async findByIdentityProviderId(identityProviderId: string): Promise<User> {
-    const userModel = await this.repo.findOne({ where: { identityProviderId }});
+    const userModel = await this.repo.findOne({
+      where: { identityProviderId },
+    });
     if (!userModel?.id) {
-      throw new UserNotFound()
+      throw new UserNotFound();
     }
-    return new User(userModel.id, userModel.email, userModel.statusId, userModel.currentBalance);
+    return new User(
+      userModel.id,
+      userModel.email,
+      userModel.statusId,
+      userModel.currentBalance,
+    );
   }
 
   async findByEmail(email: string): Promise<User> {
-    const userModel = await this.repo.findOne({ where: { email }});
+    const userModel = await this.repo.findOne({ where: { email } });
     if (!userModel?.id) {
-      throw new UserNotFound()
+      throw new UserNotFound();
     }
-    return new User(userModel.id, userModel.email, userModel.statusId, userModel.currentBalance);
+    return new User(
+      userModel.id,
+      userModel.email,
+      userModel.statusId,
+      userModel.currentBalance,
+    );
   }
 
   async updateBalance(user: User): Promise<void> {
-    await this.repo.update({ 
-      id: user.getId()
-    },
-    { currentBalance: user.getCurrentBalance() })
+    await this.repo.update(
+      {
+        id: user.getId(),
+      },
+      { currentBalance: user.getCurrentBalance() },
+    );
   }
-
 }

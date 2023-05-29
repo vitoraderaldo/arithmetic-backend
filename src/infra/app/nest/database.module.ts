@@ -11,11 +11,7 @@ import { RecordRepository } from '../../record/repository/record-repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      UserModel,
-      OperationModel,
-      RecordModel,
-    ]),
+    TypeOrmModule.forFeature([UserModel, OperationModel, RecordModel]),
     TypeOrmModule.forRootAsync({
       imports: [ConfModule],
       useFactory: (environmentConfigInterface: EnvironmentConfigInterface) => {
@@ -25,13 +21,13 @@ import { RecordRepository } from '../../record/repository/record-repository';
           type: 'mysql',
           autoLoadEntities: true,
           synchronize: false,
-          timezone: '+00:00'
+          timezone: '+00:00',
         };
       },
       inject: ['EnvironmentConfigInterface'],
     }),
   ],
-  providers: [ UserRepository, OperationRepository, RecordRepository ],
-  exports: [ UserRepository, OperationRepository, RecordRepository ],
+  providers: [UserRepository, OperationRepository, RecordRepository],
+  exports: [UserRepository, OperationRepository, RecordRepository],
 })
 export class DatabaseModule {}
