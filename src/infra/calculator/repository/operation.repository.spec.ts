@@ -8,7 +8,6 @@ import { OperationType } from '../../../domain/calculator/operation.types';
 import { UnknownOperation } from '../../../domain/calculator/error/operation-not-found';
 
 describe('OperationRepository', () => {
-
   let sut: OperationRepository;
   let repository: Repository<OperationModel>;
 
@@ -19,8 +18,8 @@ describe('OperationRepository', () => {
     cost: 1,
     inputsRequired: 2,
     dateCreated: new Date(),
-    dateModified: new Date()
-  }
+    dateModified: new Date(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,13 +27,15 @@ describe('OperationRepository', () => {
         OperationRepository,
         {
           provide: getRepositoryToken(OperationModel),
-          useValue: createMock<Repository<OperationModel>>()
+          useValue: createMock<Repository<OperationModel>>(),
         },
       ],
     }).compile();
 
     sut = module.get<OperationRepository>(OperationRepository);
-    repository = module.get<Repository<OperationModel>>(getRepositoryToken(OperationModel));
+    repository = module.get<Repository<OperationModel>>(
+      getRepositoryToken(OperationModel),
+    );
   });
 
   afterEach(() => {
@@ -48,40 +49,33 @@ describe('OperationRepository', () => {
 
   describe('Find by Type', () => {
     it('should find by type', async () => {
-
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValueOnce(operationModel);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(operationModel);
 
       const operation = await sut.findByType(OperationType.ADDITION);
       expect(operation.getId()).toEqual(operationModel.id);
       expect(operation.getType()).toEqual(operationModel.type);
       expect(operation.getName()).toEqual(operationModel.name);
       expect(operation.getCost()).toEqual(operationModel.cost);
-    })
+    });
 
     it('should throw error when not found', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValueOnce(undefined);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(undefined);
 
-      const response = sut.findByType(OperationType.ADDITION)
+      const response = sut.findByType(OperationType.ADDITION);
       await expect(response).rejects.toThrowError(UnknownOperation);
-      await expect(response).rejects.toThrowError('Operation not found with type: ADDITION');
-    })
-  })
+      await expect(response).rejects.toThrowError(
+        'Operation not found with type: ADDITION',
+      );
+    });
+  });
 
   it('should find all', async () => {
-    jest
-      .spyOn(repository, 'find')
-      .mockResolvedValueOnce([operationModel]);
+    jest.spyOn(repository, 'find').mockResolvedValueOnce([operationModel]);
 
     const operations = await sut.findAll();
-    expect(operations[0].getId()).toEqual(operationModel.id)
-    expect(operations[0].getType()).toEqual(operationModel.type)
-    expect(operations[0].getName()).toEqual(operationModel.name)
-    expect(operations[0].getCost()).toEqual(operationModel.cost)
-  })
-
-
+    expect(operations[0].getId()).toEqual(operationModel.id);
+    expect(operations[0].getType()).toEqual(operationModel.type);
+    expect(operations[0].getName()).toEqual(operationModel.name);
+    expect(operations[0].getCost()).toEqual(operationModel.cost);
+  });
 });

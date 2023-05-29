@@ -17,7 +17,6 @@ describe('HealthCheckController', () => {
     expect(controller).toBeDefined();
   });
 
-
   it('must return hello world', async () => {
     const response = controller.healthCheck();
     expect(response).toEqual('Hello World!');

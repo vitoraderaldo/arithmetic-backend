@@ -77,7 +77,9 @@ describe('AuthGuard', () => {
     const accessToken = 'validAccessToken';
     mockRequest.headers['accesstoken'] = accessToken;
 
-    const mockValidateToken = jest.fn().mockRejectedValue(new Error('Token validation failed'));
+    const mockValidateToken = jest
+      .fn()
+      .mockRejectedValue(new Error('Token validation failed'));
     mockIdentityProvider.validateToken = mockValidateToken;
 
     const result = await guard.canActivate(mockContext);

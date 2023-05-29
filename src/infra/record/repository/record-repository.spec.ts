@@ -11,7 +11,6 @@ import { OperationType } from '../../../domain/calculator/operation.types';
 import { RecordNotFound } from '../../../domain/record/error/record-not-found';
 
 describe('RecordRepository', () => {
-
   let sut: RecordRepository;
   let repository: Repository<RecordModel>;
 
@@ -23,8 +22,8 @@ describe('RecordRepository', () => {
     userBalance: 100,
     operationResponse: '5',
     deleted: false,
-    dateCreated: new Date()
-  }
+    dateCreated: new Date(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,13 +31,15 @@ describe('RecordRepository', () => {
         RecordRepository,
         {
           provide: getRepositoryToken(RecordModel),
-          useValue: createMock<Repository<RecordModel>>()
+          useValue: createMock<Repository<RecordModel>>(),
         },
       ],
     }).compile();
 
     sut = module.get<RecordRepository>(RecordRepository);
-    repository = module.get<Repository<RecordModel>>(getRepositoryToken(RecordModel));
+    repository = module.get<Repository<RecordModel>>(
+      getRepositoryToken(RecordModel),
+    );
   });
 
   afterEach(() => {
@@ -52,24 +53,22 @@ describe('RecordRepository', () => {
 
   describe('Create', () => {
     it('should create a record', async () => {
-      const saveSpy = jest.spyOn(repository, 'save')
+      const saveSpy = jest.spyOn(repository, 'save');
 
       const recordEntity = Record.createNewRecord(
         new User(1, 'user@email.com', 1, 100),
         new Operation(1, OperationType.ADDITION, 'Addition', 5, 2),
-        '2'
-      )
+        '2',
+      );
 
       await sut.create(recordEntity);
-      expect(saveSpy).toHaveBeenCalled()
-    })
-  })
+      expect(saveSpy).toHaveBeenCalled();
+    });
+  });
 
   describe('Find by ID', () => {
     it('should find a record by ID', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValueOnce(recordModel1);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(recordModel1);
 
       const record = await sut.findById('1');
       expect(record.getId()).toEqual(recordModel1.id);
@@ -77,31 +76,34 @@ describe('RecordRepository', () => {
       expect(record.getUserId()).toEqual(recordModel1.userId);
       expect(record.getAmount()).toEqual(recordModel1.amount);
       expect(record.getUserBalance()).toEqual(recordModel1.userBalance);
-      expect(record.getOperationResponse()).toEqual(recordModel1.operationResponse);
+      expect(record.getOperationResponse()).toEqual(
+        recordModel1.operationResponse,
+      );
       expect(record.isDeleted()).toEqual(recordModel1.deleted);
-    })
+    });
 
     it('should throw an error if record is not found', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockResolvedValueOnce(undefined);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(undefined);
 
-      const response = sut.findById('1')
+      const response = sut.findById('1');
       await expect(response).rejects.toThrowError(RecordNotFound);
       await expect(response).rejects.toThrowError('Record not found with id 1');
-    })
-  })
+    });
+  });
 
   it('must delete a record', async () => {
     const updateSpy = jest.spyOn(repository, 'update');
 
     await sut.deleteById('1');
-    expect(updateSpy).toHaveBeenCalledWith({
-      id: '1',
-    }, {
-      deleted: true
-    });
-  })
+    expect(updateSpy).toHaveBeenCalledWith(
+      {
+        id: '1',
+      },
+      {
+        deleted: true,
+      },
+    );
+  });
 
   it('must search records', async () => {
     jest
@@ -122,19 +124,19 @@ describe('RecordRepository', () => {
       sort: {
         field: 'dateCreated',
         order: 'desc',
-      }
+      },
     });
 
-    const {data, total} = response
+    const { data, total } = response;
     expect(data[0].getId()).toEqual(recordModel1.id);
     expect(data[0].getOperationId()).toEqual(recordModel1.operationId);
     expect(data[0].getUserId()).toEqual(recordModel1.userId);
     expect(data[0].getAmount()).toEqual(recordModel1.amount);
     expect(data[0].getUserBalance()).toEqual(recordModel1.userBalance);
-    expect(data[0].getOperationResponse()).toEqual(recordModel1.operationResponse);
+    expect(data[0].getOperationResponse()).toEqual(
+      recordModel1.operationResponse,
+    );
     expect(data[0].isDeleted()).toEqual(recordModel1.deleted);
     expect(total).toEqual(1);
-  })
-
-
+  });
 });
