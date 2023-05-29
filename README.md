@@ -13,7 +13,7 @@ The following technologies are employed in this project:
 5. Load Balancer: AWS service for receiving and forwarding requests to the containers.
 
 ## Running the service
-Before running the service, ensure that you have [Docker](https://kamilmysliwiec.com) and [AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed on your system.
+Before running the service, ensure that you have [Docker](https://www.docker.com) and [AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed on your system.
 Then run these commands below:
 ```bash
 $ docker-compose  -f docker-compose.dev.yaml up -d
