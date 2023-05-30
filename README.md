@@ -4,6 +4,10 @@ This repository contains a backend application that performs arithmetic operatio
 
 The backend application is utilized by the corresponding frontend project, which can be found at [arithmetic-frontend](https://github.com/vitoraderaldo/arithmetic-frontend).
 
+## Live App
+**Staging URL**: 
+https://api-staging.arithmetic-services.click
+
 ## Stack
 The following technologies are employed in this project:
 1. NestJS: Node.js framework used to create the API.
@@ -41,5 +45,3 @@ sh deploy.sh
 
 Please note that you won't be able to execute this command without the staging environment file, as it is not provided for security reasons.
 
-**Staging URL**: 
-https://api-staging.arithmetic-services.click
