@@ -1,4 +1,4 @@
-import { HtppClient } from '../../../@shared/interface/http-client.interface';
+import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { RandomStringInterface } from '../strategy/random-string.interface';
 
 export class RandomStringOrg implements RandomStringInterface {

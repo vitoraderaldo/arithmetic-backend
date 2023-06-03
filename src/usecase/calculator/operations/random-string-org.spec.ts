@@ -1,5 +1,5 @@
 import { createMock } from '@golevelup/ts-jest';
-import { HtppClient } from '../../../@shared/interface/http-client.interface';
+import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { RandomStringOrg } from './random-string-org';
 
 describe('Random String Org', () => {

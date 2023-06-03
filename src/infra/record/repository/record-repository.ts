@@ -4,7 +4,7 @@ import { Between, Repository } from 'typeorm';
 import { RecordRepositoryInterface } from '../../../domain/record/repository/record-repository.interface';
 import { RecordModel } from './record.model';
 import { Record } from '../../../domain/record/entity/record';
-import { PaginatedResult } from '../../../@shared/interface/paginated-result';
+import { PaginatedResult } from '../../../@shared/database/paginated-result';
 import { RecordSearchRepositoryDto } from '../../../domain/record/repository/repository.dto';
 import { RecordNotFound } from '../../../domain/record/error/record-not-found';
 

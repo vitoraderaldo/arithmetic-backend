@@ -1,4 +1,4 @@
-import { PaginatedResult } from '../../../@shared/interface/paginated-result';
+import { PaginatedResult } from '../../../@shared/database/paginated-result';
 import { Record } from '../entity/record';
 import { RecordSearchRepositoryDto } from './repository.dto';
 

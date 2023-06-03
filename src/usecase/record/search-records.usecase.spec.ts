@@ -4,7 +4,7 @@ import { UserRepositoryInterface } from '../../domain/user/repository/user-repos
 import { SearchRecordsUseCase } from './serch-records.usecase';
 import { SearchRecordsInputDto } from './dto/search-records.dto';
 import { User } from '../../domain/user/entity/user';
-import { PaginatedResult } from '../../@shared/interface/paginated-result';
+import { PaginatedResult } from '../../@shared/database/paginated-result';
 import { Record } from '../../domain/record/entity/record';
 import { Operation } from '../../domain/calculator/entity/operation';
 import { OperationType } from '../../domain/calculator/operation.types';

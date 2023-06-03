@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HtppClient } from '../../@shared/interface/http-client.interface';
+import { HtppClient } from '../../@shared/http-client/http-client.interface';
 
 export class AxiosService implements HtppClient {
   async get<T>(url: string, headers: any): Promise<T> {

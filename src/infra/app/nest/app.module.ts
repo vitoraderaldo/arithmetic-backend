@@ -22,7 +22,7 @@ import { RandomStringInterface } from '../../../usecase/calculator/strategy/rand
 import { RandomStringOrg } from '../../../usecase/calculator/operations/random-string-org';
 import { RandomStringService } from '../../../usecase/calculator/operations/random-string.service';
 import { AxiosService } from '../../http-client/axios.service';
-import { HtppClient } from '../../../@shared/interface/http-client.interface';
+import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 
 @Module({
