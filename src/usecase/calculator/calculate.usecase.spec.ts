@@ -10,6 +10,10 @@ import { Operation } from '../../domain/calculator/entity/operation';
 import { RecordRepositoryInterface } from '../../domain/record/repository/record-repository.interface';
 import { BalanceError } from '../../domain/user/error/balance.error';
 
+jest.mock('typeorm-transactional', () => ({
+  Transactional: () => () => ({}),
+}));
+
 describe('Calculate Use Case', () => {
   let calculateUseCase: CalculateUseCase;
   let calculatorStrategy: CalculatorStrategy;

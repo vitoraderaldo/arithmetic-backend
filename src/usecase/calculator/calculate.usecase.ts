@@ -6,6 +6,7 @@ import { CalculatorStrategy } from './strategy/calculator-strategy';
 import { Record } from '../../domain/record/entity/record';
 import { User } from '../../domain/user/entity/user';
 import { Operation } from '../../domain/calculator/entity/operation';
+import { Transactional } from '../../@shared/database/transactional.decorator';
 
 export class CalculateUseCase {
   constructor(
@@ -15,6 +16,7 @@ export class CalculateUseCase {
     private readonly recordRepository: RecordRepositoryInterface,
   ) {}
 
+  @Transactional()
   public async execute(input: CalculateInputDto): Promise<CalculateOutputDto> {
     const [user, operation] = await this.getUserAndOperation(input);
     const result = await this.updateUserBalanceAndPerformCalculation(

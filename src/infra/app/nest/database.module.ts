@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 import { ConfModule } from './config.module';
 import { EnvironmentConfigInterface } from '../../../@shared/environment/environment-config.interface';
 import { UserModel } from '../../user/repository/user.model';
@@ -23,6 +25,12 @@ import { RecordRepository } from '../../record/repository/record-repository';
           synchronize: false,
           timezone: '+00:00',
         };
+      },
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        return addTransactionalDataSource(new DataSource(options));
       },
       inject: ['EnvironmentConfigInterface'],
     }),

@@ -5,7 +5,7 @@ import {
 } from './dto/search-records.dto';
 import { Record } from '../../domain/record/entity/record';
 import { UserRepositoryInterface } from '../../domain/user/repository/user-repository.interface';
-import { PaginatedResult } from '../../@shared/interface/paginated-result';
+import { PaginatedResult } from '../../@shared/database/paginated-result';
 import { OperationRepositoryInterface } from '../../domain/calculator/repository/operation-repository.interface';
 import { Operation } from '../../domain/calculator/entity/operation';
 import { DateFilterError } from '../../@shared/error/date-filter.error';
