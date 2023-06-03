@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock } from '@golevelup/ts-jest';
+import { Response } from 'express';
 import { RecordsController } from './records.controller';
 import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
 import { AuthGuard } from '../../guards/auth.guard';
@@ -15,6 +16,7 @@ describe('RecordsController', () => {
   let controller: RecordsController;
   let searchRecordsUseCase: SearchRecordsUseCase;
   let deleteRecordUseCase: DeleteRecordUseCase;
+  let response: Response;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -37,6 +39,7 @@ describe('RecordsController', () => {
     controller = app.get<RecordsController>(RecordsController);
     searchRecordsUseCase = app.get<SearchRecordsUseCase>(SearchRecordsUseCase);
     deleteRecordUseCase = app.get<DeleteRecordUseCase>(DeleteRecordUseCase);
+    response = createMock<Response>();
   });
 
   it('must create the controller successfully', () => {
@@ -67,13 +70,12 @@ describe('RecordsController', () => {
         },
       };
 
-      jest.spyOn(searchRecordsUseCase, 'execute').mockResolvedValue(result);
+      const searchSpy = jest
+        .spyOn(searchRecordsUseCase, 'execute')
+        .mockResolvedValue(result);
 
-      const response = await controller.searchRecords(
-        params,
-        identityProviderId,
-      );
-      expect(response).toEqual(result);
+      await controller.searchRecords(params, identityProviderId, response);
+      expect(searchSpy).toBeCalled();
     });
   });
 

@@ -21,13 +21,13 @@ describe('Random String Org', () => {
   });
 
   it('must return a random string', async () => {
-    const randomString = 'random-string';
+    const randomString = 'rand\nom-string';
     const getSpy = jest
       .spyOn(httpClient, 'get')
       .mockResolvedValueOnce(randomString);
 
     const result = await randomStringOrg.randomString();
-    expect(result).toEqual(randomString);
+    expect(result).toEqual('random-string');
     expect(getSpy).toHaveBeenCalledTimes(1);
     expect(getSpy).toHaveBeenCalledWith(
       'https://random.org/strings/?num=8&len=1&digits=on&upperalpha=on&loweralpha=on&format=plain',

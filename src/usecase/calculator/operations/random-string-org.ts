@@ -14,11 +14,12 @@ export class RandomStringOrg implements RandomStringInterface {
     format: 'plain',
   };
 
-  public randomString(): Promise<string> {
+  public async randomString(): Promise<string> {
     const endpoint = '/strings';
     const url = `${this.BASE_URL}${endpoint}/?${new URLSearchParams(
       this.RANDOM_STRING_CONFIG as any,
     )}`;
-    return this.httpClient.get<string>(url);
+    const response = await this.httpClient.get<string>(url);
+    return response.replace(/\n/g, '');
   }
 }
