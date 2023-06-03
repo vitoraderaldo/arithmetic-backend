@@ -1,3 +1,4 @@
+import { InvalidDataError } from '../../../@shared/error/invalid-data.error';
 import { Operation } from '../../calculator/entity/operation';
 import { OperationType } from '../../calculator/operation.types';
 import { User } from '../../user/entity/user';
@@ -5,17 +6,17 @@ import { Record } from './record';
 
 describe('Record', () => {
   describe('Create new Record', () => {
-    it('must create a new record successfully', () => {
-      const user = new User(1, 'email@email.com', 1, 100);
-      const operation = new Operation(
-        1,
-        OperationType.ADDITION,
-        'Addition',
-        10,
-        2,
-      );
-      const result = '10';
+    const user = new User(1, 'email@email.com', 1, 100);
+    const operation = new Operation(
+      1,
+      OperationType.ADDITION,
+      'Addition',
+      10,
+      2,
+    );
+    const result = '10';
 
+    it('must create a new record successfully', () => {
       const record = Record.createNewRecord(user, operation, result);
       expect(record.getId()).toBeDefined();
       expect(record.getOperationId()).toBe(operation.getId());
@@ -25,6 +26,12 @@ describe('Record', () => {
       expect(record.getOperationResponse()).toBe(result);
       expect(record.isDeleted()).toBe(false);
       expect(record.getCreatedAt()).toBeDefined();
+    });
+
+    it('must not create when response is invalid', () => {
+      const record = () => Record.createNewRecord(user, operation, null);
+      expect(record).toThrowError('Operation response must be a string');
+      expect(record).toThrowError(InvalidDataError);
     });
   });
 

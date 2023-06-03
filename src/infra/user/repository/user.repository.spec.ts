@@ -91,7 +91,7 @@ describe('UserRepository', () => {
         .spyOn(repository, 'update')
         .mockResolvedValueOnce(undefined);
 
-      const user = new User(1, 'email', 1, 100);
+      const user = new User(1, 'email@email.com', 1, 100);
 
       await sut.updateBalance(user);
       expect(updateSpy).toHaveBeenCalledTimes(1);

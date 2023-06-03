@@ -1,3 +1,4 @@
+import { InvalidDataError } from '../../../@shared/error/invalid-data.error';
 import { BalanceError } from '../error/balance.error';
 import { User } from './user';
 
@@ -52,4 +53,22 @@ describe('User', () => {
       expect(spendMoney).toThrowError(BalanceError);
     },
   );
+
+  describe('Create user with invalid data', () => {
+    it('must not create user if id is less than 0', () => {
+      const createUser = () => new User(-1, 'email', 1, 100);
+      expect(createUser).toThrowError(
+        'id must be a positive number, email must be an email',
+      );
+      expect(createUser).toThrow(InvalidDataError);
+    });
+
+    it('must not create user with invalid id, email, statusId', () => {
+      const createUser = () => new User(-1, 'email', 0, 100);
+      expect(createUser).toThrowError(
+        'id must be a positive number, email must be an email, statusId must be a positive number',
+      );
+      expect(createUser).toThrow(InvalidDataError);
+    });
+  });
 });

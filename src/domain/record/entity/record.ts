@@ -1,8 +1,11 @@
 import { v4 as uuid } from 'uuid';
 import { Operation } from '../../calculator/entity/operation';
 import { User } from '../../user/entity/user';
+import { Entity } from '../../../@shared/entity/entity.abstract';
+import { RecordValidatorFactory } from '../validator/record-validator.factory';
+import { InvalidDataError } from '../../../@shared/error/invalid-data.error';
 
-export class Record {
+export class Record extends Entity {
   private constructor(
     private readonly id: string,
     private readonly operationId: number,
@@ -12,14 +15,16 @@ export class Record {
     private readonly operationResponse: string,
     private deleted: boolean,
     private readonly createdAt: Date,
-  ) {}
+  ) {
+    super();
+  }
 
   public static createNewRecord(
     user: User,
     operation: Operation,
     result: string,
   ) {
-    return new Record(
+    const record = new Record(
       uuid(),
       operation.getId(),
       user.getId(),
@@ -29,6 +34,11 @@ export class Record {
       false,
       new Date(),
     );
+    const isValid = RecordValidatorFactory.create().isValid(record);
+    if (!isValid) {
+      throw new InvalidDataError(record.notification.messages('record'));
+    }
+    return record;
   }
 
   public static createFromExistingRecord(

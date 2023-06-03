@@ -1,12 +1,21 @@
+import { Entity } from '../../../@shared/entity/entity.abstract';
+import { InvalidDataError } from '../../../@shared/error/invalid-data.error';
 import { BalanceError } from '../error/balance.error';
+import { UserValidatorFactory } from '../validator/user-validator.factory';
 
-export class User {
+export class User extends Entity {
   constructor(
     private id: number,
     private email: string,
     private statusId: number,
     private currentBalance: number,
-  ) {}
+  ) {
+    super();
+    const isValid = UserValidatorFactory.create().isValid(this);
+    if (!isValid) {
+      throw new InvalidDataError(this.notification.messages('user'));
+    }
+  }
 
   public getId(): number {
     return this.id;
@@ -30,10 +39,19 @@ export class User {
 
   public spendMoney(amount: number): void {
     if (amount <= 0) {
-      throw new BalanceError('Amount must be greater than 0');
+      this.notification.addError({
+        message: 'Amount must be greater than 0',
+        context: 'user',
+      });
     }
     if (amount > this.currentBalance) {
-      throw new BalanceError(`Your balance is not enough to spend $ ${amount}`);
+      this.notification.addError({
+        message: `Your balance is not enough to spend $ ${amount}`,
+        context: 'user',
+      });
+    }
+    if (this.notification.hasErrors()) {
+      throw new BalanceError(this.notification.messages('user'));
     }
     this.currentBalance -= amount;
   }
