@@ -70,7 +70,7 @@ describe('User Login', () => {
       password: '1234',
     };
 
-    const inactiveUser = new User(1, credentials.email, 0, 100);
+    const inactiveUser = new User(1, credentials.email, 2, 100);
 
     jest.spyOn(userRepository, 'findByEmail').mockResolvedValue(inactiveUser);
 
