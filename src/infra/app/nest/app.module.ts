@@ -26,6 +26,9 @@ import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
 import { EventDispatcherFactory } from '../../event/event-dispatcher.factory';
 import { EventDispatcherInterface } from 'arithmetic-packages';
+import { KafkaJSClient } from '../../event/kafkajs-client';
+import { KafkaPublisherHandler } from '../../event/kafka-publisher.handler';
+import { KafkaClient } from '../../event/kafka-client.interface';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -37,8 +40,33 @@ import { EventDispatcherInterface } from 'arithmetic-packages';
   ],
   providers: [
     {
+      provide: KafkaJSClient,
+      useFactory: (environmentConfig: EnvironmentConfigInterface) =>
+        new KafkaJSClient(environmentConfig),
+      inject: ['EnvironmentConfigInterface'],
+    },
+    {
+      provide: 'KafkaClient',
+      useFactory: (kafkaJSClient: KafkaJSClient) => kafkaJSClient,
+      inject: [KafkaJSClient],
+    },
+    {
+      provide: KafkaPublisherHandler,
+      useFactory: (kafkaClient: KafkaClient) =>
+        new KafkaPublisherHandler(kafkaClient),
+      inject: ['KafkaClient'],
+    },
+    {
+      provide: EventDispatcherFactory,
+      useFactory: (kafkaPublisherHandler: KafkaPublisherHandler) =>
+        new EventDispatcherFactory(kafkaPublisherHandler),
+      inject: [KafkaPublisherHandler],
+    },
+    {
       provide: 'EventDispatcherInterface',
-      useFactory: () => EventDispatcherFactory.create(),
+      useFactory: (eventDispatcherFactory: EventDispatcherFactory) =>
+        eventDispatcherFactory.create(),
+      inject: [EventDispatcherFactory],
     },
     {
       provide: 'CalculatorInterface',

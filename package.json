@@ -36,6 +36,7 @@
     "class-validator": "^0.14.0",
     "jsonwebtoken": "^9.0.0",
     "jstoxml": "^3.2.7",
+    "kafkajs": "^2.2.4",
     "knex": "^2.4.2",
     "mysql2": "^3.3.2",
     "reflect-metadata": "^0.1.13",

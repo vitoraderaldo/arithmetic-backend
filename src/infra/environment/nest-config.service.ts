@@ -3,6 +3,7 @@ import {
   CognitoEnvConfig,
   DatabaseConfig,
   EnvironmentConfigInterface,
+  KafkaConfig,
 } from '../../@shared/environment/environment-config.interface';
 
 export class NestConfigService implements EnvironmentConfigInterface {
@@ -23,6 +24,13 @@ export class NestConfigService implements EnvironmentConfigInterface {
       username: this.nestConfig.get('DATABASE_USERNAME'),
       password: this.nestConfig.get('DATABASE_PASSWORD'),
       database: this.nestConfig.get('DATABASE_NAME'),
+    };
+  }
+
+  getKafka(): KafkaConfig {
+    return {
+      brokers: this.nestConfig.get('KAFKA_BROKERS')?.split(','),
+      clientId: this.nestConfig.get('KAFKA_CLIENT_ID'),
     };
   }
 }

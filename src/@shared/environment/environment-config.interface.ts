@@ -12,7 +12,13 @@ export interface DatabaseConfig {
   database: string;
 }
 
+export interface KafkaConfig {
+  brokers: string[];
+  clientId: string;
+}
+
 export interface EnvironmentConfigInterface {
   getCognito(): CognitoEnvConfig;
   getDatabase(): DatabaseConfig;
+  getKafka(): KafkaConfig;
 }
