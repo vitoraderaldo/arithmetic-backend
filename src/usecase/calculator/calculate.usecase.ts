@@ -7,6 +7,8 @@ import { Record } from '../../domain/record/entity/record';
 import { User } from '../../domain/user/entity/user';
 import { Operation } from '../../domain/calculator/entity/operation';
 import { Transactional } from '../../@shared/database/transactional.decorator';
+import { EventDispatcherInterface, EventName } from 'arithmetic-packages';
+import { OperationCalculatedEvent } from '../../domain/calculator/event/operation-calculated.event';
 
 export class CalculateUseCase {
   constructor(
@@ -14,6 +16,7 @@ export class CalculateUseCase {
     private readonly userRepository: UserRepositoryInterface,
     private readonly operationRepository: OperationRepositoryInterface,
     private readonly recordRepository: RecordRepositoryInterface,
+    private readonly eventDispatcherInterface: EventDispatcherInterface,
   ) {}
 
   @Transactional()
@@ -25,6 +28,7 @@ export class CalculateUseCase {
       input,
     );
     await this.saveOperationRecord(user, operation, result);
+    this.publishOperationCalculatedEvent(user, input, result.toString());
     return {
       result,
       finalBalance: Number(user.getCurrentBalance().toFixed(2)),
@@ -62,5 +66,22 @@ export class CalculateUseCase {
   ): Promise<void> {
     const record = Record.createNewRecord(user, operation, result.toString());
     await this.recordRepository.create(record);
+  }
+
+  private async publishOperationCalculatedEvent(
+    user: User,
+    input: CalculateInputDto,
+    result: string,
+  ) {
+    const event = new OperationCalculatedEvent({
+      eventName: EventName.OPERATION_CALCULATED,
+      data: {
+        userId: user.getId(),
+        operationType: input.operationType,
+        arguments: input.arguments,
+        result,
+      },
+    });
+    this.eventDispatcherInterface.dispatch(event);
   }
 }

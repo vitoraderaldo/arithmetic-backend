@@ -24,6 +24,8 @@ import { RandomStringService } from '../../../usecase/calculator/operations/rand
 import { AxiosService } from '../../http-client/axios.service';
 import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
+import { EventDispatcherFactory } from '../../event/event-dispatcher.factory';
+import { EventDispatcherInterface } from 'arithmetic-packages';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -34,6 +36,10 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
     RecordsController,
   ],
   providers: [
+    {
+      provide: 'EventDispatcherInterface',
+      useFactory: () => EventDispatcherFactory.create(),
+    },
     {
       provide: 'CalculatorInterface',
       useFactory: () => new Calculator(),
@@ -74,18 +80,21 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
         userRepository: UserRepository,
         operationRepository: OperationRepository,
         recordRepository: RecordRepository,
+        eventDispatcher: EventDispatcherInterface,
       ) =>
         new CalculateUseCase(
           calculatorStrategy,
           userRepository,
           operationRepository,
           recordRepository,
+          eventDispatcher,
         ),
       inject: [
         CalculatorStrategy,
         UserRepository,
         OperationRepository,
         RecordRepository,
+        'EventDispatcherInterface',
       ],
     },
     {
