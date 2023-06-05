@@ -13,16 +13,18 @@ services:
       - db-data:/var/lib/mysql
 
   zookeeper:
+    platform: linux/amd64
     image: "confluentinc/cp-zookeeper:6.1.0"
     container_name: zookeeper
     ports:
       - 2181:2181
     environment:
-      TZ: Etc/UTC
+      TZ: Sao_Paulo/Brazil
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
+    platform: linux/amd64
     image: "confluentinc/cp-enterprise-kafka:6.1.0"
     container_name: kafka
     depends_on:
@@ -30,7 +32,7 @@ services:
     ports:
       - '9092:9092'
     environment:
-      TZ: Etc/UTC
+      TZ: Sao_Paulo/Brazil
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
