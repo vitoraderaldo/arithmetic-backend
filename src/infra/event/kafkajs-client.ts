@@ -1,17 +1,15 @@
 import { Kafka } from 'kafkajs';
 import { KafkaClient } from './kafka-client.interface';
-import { EnvironmentConfigInterface } from '../../@shared/environment/environment-config.interface';
-
 export class KafkaJSClient implements KafkaClient {
   private kafka: Kafka;
 
   constructor(
-    private readonly environmentConfigInterface: EnvironmentConfigInterface,
+    private readonly clientId: string,
+    private readonly brokers: string[],
   ) {
-    const kafkaConfig = this.environmentConfigInterface.getKafka();
     this.kafka = new Kafka({
-      clientId: kafkaConfig.clientId,
-      brokers: kafkaConfig.brokers,
+      clientId: this.clientId,
+      brokers: this.brokers,
     });
   }
 
