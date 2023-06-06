@@ -41,8 +41,10 @@ import { KafkaClient } from '../../event/kafka-client.interface';
   providers: [
     {
       provide: KafkaJSClient,
-      useFactory: (environmentConfig: EnvironmentConfigInterface) =>
-        new KafkaJSClient(environmentConfig),
+      useFactory: (environmentConfig: EnvironmentConfigInterface) => {
+        const kafkaConfig = environmentConfig.getKafka();
+        return new KafkaJSClient(kafkaConfig.clientId, kafkaConfig.brokers);
+      },
       inject: ['EnvironmentConfigInterface'],
     },
     {
