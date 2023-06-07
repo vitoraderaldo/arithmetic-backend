@@ -6,14 +6,14 @@ The backend application is utilized by the corresponding frontend project, which
 
 ## Live App
 **Staging URL**: 
-https://api-staging.arithmetic-services.click
+https://k8s-api-staging.arithmetic-services.click
 
 ## Stack
 The following technologies are employed in this project:
 1. NestJS: Node.js framework used to create the API.
 2. Cognito: AWS service used for user authentication.
 3. Docker: Containerization platform for running the API.
-4. Elastic Container Service: AWS service for deploying and running containers in the cloud.
+4. Amazon Elastic Kubernetes Service: AWS service for deploying and running containers using Kubernetes in the cloud.
 5. Load Balancer: AWS service for receiving and forwarding requests to the containers.
 
 ## Running the service
