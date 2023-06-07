@@ -1,0 +1,26 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+    name: arithmetic-staging-cluster
+    region: sa-east-1
+nodeGroups:
+    - name: ng-2vcpu-4gb-spot
+      minSize: 0
+      maxSize: 1
+      desiredCapacity: 1
+      instancesDistribution:
+        instanceTypes: ["t3.medium"] 
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 0
+        spotAllocationStrategy: capacity-optimized
+      labels:
+        lifecycle: Ec2Spot
+        intent: apps
+        aws.amazon.com/spot: "true"
+      tags:
+        k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+        k8s.io/cluster-autoscaler/node-template/label/intent: apps
+      iam:
+        withAddonPolicies:
+          autoScaler: true
+          albIngress: true
