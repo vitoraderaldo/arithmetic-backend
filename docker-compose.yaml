@@ -1,8 +1,0 @@
-version: "3"
-services:
-   api:
-    image: vitor96k/arithmetic-backend:4.0.0
-    ports:
-      - "80"
-    env_file:
-      - 'src/infra/environment/${ENVIRONMENT}.env'
