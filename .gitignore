@@ -37,3 +37,6 @@ lerna-debug.log*
 
 *.env
 !dev.env
+
+k8s/**/*-env.yaml
+!k8s/**/*-dev-env.yaml

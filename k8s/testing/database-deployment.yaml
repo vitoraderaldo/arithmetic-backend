@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-local
+  labels:
+    app: database-local
+spec:
+  selector:
+    matchLabels:
+      app: database-local
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: database-local
+    spec:
+      containers:
+        - name: database-local
+          ports:
+          - containerPort: 3306
+          image: "mysql:8.0"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 250Mi
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: arithmetic
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: password
