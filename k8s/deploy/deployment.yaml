@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "arithmetic-backend"
+        app: arithmetic-backend
     spec:
       containers:
         - name: arithmetic-backend
@@ -24,14 +24,6 @@ spec:
             limits:
               cpu: 100m
               memory: 650Mi
-              
-          readinessProbe: # Monitor and tag container as not ready
-            httpGet:
-              path: /
-              port: 80 # Container Port
-            periodSeconds: 3 # Frequency to monitor the container
-            failureThreshold: 1 # How many times can it fail before restarting
-            initialDelaySeconds: 5
 
           envFrom:
             - configMapRef:
