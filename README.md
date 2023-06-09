@@ -20,7 +20,7 @@ The following technologies are employed in this project:
 Before running the service, ensure that you have [Docker](https://www.docker.com) and [AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed on your system.
 Then run these commands below:
 ```bash
-$ docker-compose  -f docker-compose.dev.yaml up -d
+$ docker compose up -d
 $ npm run migration:run
 $ npm run seed:run
 $ npm install
