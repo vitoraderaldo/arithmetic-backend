@@ -1,12 +1,12 @@
 name: push-image-develop
 
 on:
-  create:
+  push:
     tags:
       - "*"
 
 jobs:
-  docker:
+  test_and_push:
     runs-on: ubuntu-latest
     steps:
       - name: Download Repository
