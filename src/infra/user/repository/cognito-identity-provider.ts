@@ -42,5 +42,4 @@ export class CognitoIdentityProviderService
       expirensInSeconds: authResult.ExpiresIn,
     };
   }
-
 }
