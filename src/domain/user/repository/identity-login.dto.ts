@@ -5,6 +5,7 @@ export interface IdentityLoginInputDto {
 
 export interface IdentityLoginOutputDto {
   accessToken: string;
+  idToken: string;
   refreshToken: string;
   expirensInSeconds: number;
 }
