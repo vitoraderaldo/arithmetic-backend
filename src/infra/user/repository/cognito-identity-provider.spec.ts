@@ -3,7 +3,6 @@ import { EnvironmentConfigInterface } from '../../../@shared/environment/environ
 import { CognitoIdentityProviderService } from './cognito-identity-provider';
 import { IdentityLoginInputDto } from '../../../domain/user/repository/identity-login.dto';
 
-jest.mock('aws-jwt-verify');
 jest.mock('aws-sdk');
 
 describe('Cognito Identity Provider', () => {
@@ -67,32 +66,4 @@ describe('Cognito Identity Provider', () => {
     });
   });
 
-  describe('Validate Token', () => {
-    it('should validate token successfully', async () => {
-      const mockVerify = jest.fn().mockResolvedValueOnce(true);
-      (sut as any).verifier = {
-        verify: mockVerify,
-      };
-
-      const token = 'sampleToken';
-      const result = await sut.validateToken(token);
-
-      expect(mockVerify).toHaveBeenCalledWith(token);
-      expect(result).toBe(true);
-    });
-
-    it('should fail to validate token', async () => {
-      const error = new Error('Token verification failed');
-      const mockVerify = jest.fn().mockRejectedValueOnce(error);
-      (sut as any).verifier = {
-        verify: mockVerify,
-      };
-
-      const token = 'invalidToken';
-      const result = await sut.validateToken(token);
-
-      expect(mockVerify).toHaveBeenCalledWith(token);
-      expect(result).toBe(false);
-    });
-  });
 });

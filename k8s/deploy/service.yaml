@@ -9,5 +9,5 @@ spec:
 
   ports:
   - port: 80 # Service Port
-    targetPort: 80 # Container Port
+    targetPort: 7001 # Container Port
     protocol: TCP

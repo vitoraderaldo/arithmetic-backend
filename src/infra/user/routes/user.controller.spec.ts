@@ -31,6 +31,7 @@ describe('UserController', () => {
     it('must log in successfully', async () => {
       const tokenResponse: UserLoginOutputDto = {
         accessToken: 'access-token',
+        idToken: 'id-token',
         refreshToken: 'refresh-token',
         expirensInSeconds: 3600,
       };
