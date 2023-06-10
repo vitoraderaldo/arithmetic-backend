@@ -65,5 +65,4 @@ describe('Cognito Identity Provider', () => {
       },
     });
   });
-
 });

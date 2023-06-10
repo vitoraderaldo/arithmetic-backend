@@ -1,12 +1,8 @@
 import { ExecutionContext } from '@nestjs/common';
 import { createMock } from '@golevelup/ts-jest';
-import { decode } from 'jsonwebtoken';
 import { AuthGuard } from './auth.guard';
 import { AuthRequest } from './custom.request';
-
-jest.mock('jsonwebtoken', () => ({
-  decode: jest.fn(),
-}));
+import { validIdTokenMock } from '../../mocks/valid-token.mock';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
@@ -28,16 +24,14 @@ describe('AuthGuard', () => {
       }),
     });
 
-    const accessToken = 'validAccessToken';
-    mockRequest.headers['authorization'] = accessToken;
-
-    const mockDecodedToken = { sub: 'user123' };
-    (decode as jest.Mock).mockReturnValue(mockDecodedToken);
+    mockRequest.headers['authorization'] = `Bearer ${validIdTokenMock}`;
 
     const result = await guard.canActivate(mockContext);
 
     expect(result).toBe(true);
-    expect(mockRequest.user).toEqual({ sub: 'user123' });
+    expect(mockRequest.user).toEqual({
+      sub: '790b0b1e-302f-4b81-8fff-c4a498386772',
+    });
   });
 
   it('should deny access if token is invalid', async () => {
@@ -48,8 +42,7 @@ describe('AuthGuard', () => {
       }),
     });
 
-    const invalidAccessToken = 'invalidAccessToken';
-    mockRequest.headers['authorization'] = invalidAccessToken;
+    mockRequest.headers['authorization'] = 'invalidToken';
 
     const result = await guard.canActivate(mockContext);
 
