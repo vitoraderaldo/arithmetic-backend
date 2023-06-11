@@ -89,7 +89,6 @@ services:
       retries: 5
       start_period: 10s
 
-
   configure-kafka:
     platform: linux/amd64
     image: "confluentinc/cp-enterprise-kafka:6.1.0"
@@ -105,3 +104,28 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka:29092 --list
       "
+
+  arithmetic-calulator:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "7001:7001"
+
+  run-migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run migration:run
