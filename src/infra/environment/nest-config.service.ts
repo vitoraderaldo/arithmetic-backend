@@ -31,6 +31,10 @@ export class NestConfigService implements EnvironmentConfigInterface {
     return {
       brokers: this.nestConfig.get('KAFKA_BROKERS')?.split(','),
       clientId: this.nestConfig.get('KAFKA_CLIENT_ID'),
+      credentials: {
+        username: this.nestConfig.get('KAFKA_USERNAME'),
+        password: this.nestConfig.get('KAFKA_PASSWORD'),
+      },
     };
   }
 }

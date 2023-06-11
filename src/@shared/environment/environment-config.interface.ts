@@ -15,6 +15,10 @@ export interface DatabaseConfig {
 export interface KafkaConfig {
   brokers: string[];
   clientId: string;
+  credentials: {
+    username: string;
+    password: string;
+  };
 }
 
 export interface EnvironmentConfigInterface {
