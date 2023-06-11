@@ -24,6 +24,11 @@ import { RandomStringService } from '../../../usecase/calculator/operations/rand
 import { AxiosService } from '../../http-client/axios.service';
 import { HtppClient } from '../../../@shared/http-client/http-client.interface';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
+import { EventDispatcherFactory } from '../../event/event-dispatcher.factory';
+import { EventDispatcherInterface } from 'arithmetic-packages';
+import { KafkaJSClient } from '../../event/kafkajs-client';
+import { KafkaPublisherHandler } from '../../event/kafka-publisher.handler';
+import { KafkaClient } from '../../event/kafka-client.interface';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -34,6 +39,37 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
     RecordsController,
   ],
   providers: [
+    {
+      provide: KafkaJSClient,
+      useFactory: (environmentConfig: EnvironmentConfigInterface) => {
+        const kafkaConfig = environmentConfig.getKafka();
+        return new KafkaJSClient(kafkaConfig.clientId, kafkaConfig.brokers);
+      },
+      inject: ['EnvironmentConfigInterface'],
+    },
+    {
+      provide: 'KafkaClient',
+      useFactory: (kafkaJSClient: KafkaJSClient) => kafkaJSClient,
+      inject: [KafkaJSClient],
+    },
+    {
+      provide: KafkaPublisherHandler,
+      useFactory: (kafkaClient: KafkaClient) =>
+        new KafkaPublisherHandler(kafkaClient),
+      inject: ['KafkaClient'],
+    },
+    {
+      provide: EventDispatcherFactory,
+      useFactory: (kafkaPublisherHandler: KafkaPublisherHandler) =>
+        new EventDispatcherFactory(kafkaPublisherHandler),
+      inject: [KafkaPublisherHandler],
+    },
+    {
+      provide: 'EventDispatcherInterface',
+      useFactory: (eventDispatcherFactory: EventDispatcherFactory) =>
+        eventDispatcherFactory.create(),
+      inject: [EventDispatcherFactory],
+    },
     {
       provide: 'CalculatorInterface',
       useFactory: () => new Calculator(),
@@ -74,18 +110,21 @@ import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.useca
         userRepository: UserRepository,
         operationRepository: OperationRepository,
         recordRepository: RecordRepository,
+        eventDispatcher: EventDispatcherInterface,
       ) =>
         new CalculateUseCase(
           calculatorStrategy,
           userRepository,
           operationRepository,
           recordRepository,
+          eventDispatcher,
         ),
       inject: [
         CalculatorStrategy,
         UserRepository,
         OperationRepository,
         RecordRepository,
+        'EventDispatcherInterface',
       ],
     },
     {

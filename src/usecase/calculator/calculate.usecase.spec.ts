@@ -9,6 +9,7 @@ import { User } from '../../domain/user/entity/user';
 import { Operation } from '../../domain/calculator/entity/operation';
 import { RecordRepositoryInterface } from '../../domain/record/repository/record-repository.interface';
 import { BalanceError } from '../../domain/user/error/balance.error';
+import { EventDispatcherInterface } from 'arithmetic-packages';
 
 jest.mock('typeorm-transactional', () => ({
   Transactional: () => () => ({}),
@@ -20,17 +21,21 @@ describe('Calculate Use Case', () => {
   let userRepository: UserRepositoryInterface;
   let operationRepository: OperationRepositoryInterface;
   let recordRepository: RecordRepositoryInterface;
+  let eventDispatcherInterface: EventDispatcherInterface;
 
   beforeEach(() => {
     calculatorStrategy = createMock<CalculatorStrategy>();
     userRepository = createMock<UserRepositoryInterface>();
     operationRepository = createMock<OperationRepositoryInterface>();
     recordRepository = createMock<RecordRepositoryInterface>();
+    eventDispatcherInterface = createMock<EventDispatcherInterface>();
+
     calculateUseCase = new CalculateUseCase(
       calculatorStrategy,
       userRepository,
       operationRepository,
       recordRepository,
+      eventDispatcherInterface,
     );
   });
 
@@ -68,6 +73,7 @@ describe('Calculate Use Case', () => {
       .spyOn(operationRepository, 'findByType')
       .mockResolvedValueOnce(operation);
 
+    const dispatchSpy = jest.spyOn(eventDispatcherInterface, 'dispatch');
     const updateBalanceSpy = jest.spyOn(userRepository, 'updateBalance');
     const createRecordSpy = jest.spyOn(recordRepository, 'create');
 
@@ -78,6 +84,7 @@ describe('Calculate Use Case', () => {
     expect(user.getCurrentBalance()).toEqual(90);
     expect(updateBalanceSpy).toHaveBeenCalledWith(user);
     expect(createRecordSpy).toHaveBeenCalled();
+    expect(dispatchSpy).toHaveBeenCalled();
   });
 
   it('must not calculate the operation when the user balance is not enough', async () => {
@@ -103,6 +110,7 @@ describe('Calculate Use Case', () => {
       .spyOn(operationRepository, 'findByType')
       .mockResolvedValueOnce(operation);
 
+    const dispatchSpy = jest.spyOn(eventDispatcherInterface, 'dispatch');
     const updateBalanceSpy = jest.spyOn(userRepository, 'updateBalance');
     const createRecordSpy = jest.spyOn(recordRepository, 'create');
 
@@ -114,5 +122,6 @@ describe('Calculate Use Case', () => {
     expect(user.getCurrentBalance()).toEqual(5);
     expect(updateBalanceSpy).not.toHaveBeenCalled();
     expect(createRecordSpy).not.toHaveBeenCalled();
+    expect(dispatchSpy).not.toHaveBeenCalled();
   });
 });
