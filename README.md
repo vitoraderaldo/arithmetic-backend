@@ -38,11 +38,4 @@ $ npm run test:e2e
 ```
 
 ## Deployment
-To deploy the app in staging just run:
-```bash
-$ cd k8s/aws
-$ make deploy
-```
-
-Please note that you won't be able to execute this command without the staging environment file, as it is not provided for security reasons. And also you don't have the correct AWS Profile.
-
+The deployment to staging will happen when a tag gets created.
