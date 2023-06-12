@@ -39,7 +39,7 @@ describe('Kafka Publisher Handler', () => {
     expect(publishSpy).toHaveBeenCalledTimes(1);
     expect(publishSpy).toHaveBeenCalledWith(
       EventName.OPERATION_CALCULATED,
-      JSON.stringify(event.getPayload()),
+      JSON.stringify(event.payload),
     );
   });
 });

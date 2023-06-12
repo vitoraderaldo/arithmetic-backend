@@ -13,17 +13,8 @@ export interface OperationCalculatedEventProps {
 export class OperationCalculatedEvent
   implements EventInterface<OperationCalculatedEventProps>
 {
-  constructor(private readonly payload: OperationCalculatedEventProps) {}
+  public readonly name = EventName.OPERATION_CALCULATED;
+  public readonly dateTime = new Date();
 
-  getName(): string {
-    return EventName.OPERATION_CALCULATED;
-  }
-
-  getPayload(): OperationCalculatedEventProps {
-    return this.payload;
-  }
-
-  getDateTime(): Date {
-    return new Date();
-  }
+  constructor(public readonly payload: OperationCalculatedEventProps) {}
 }
