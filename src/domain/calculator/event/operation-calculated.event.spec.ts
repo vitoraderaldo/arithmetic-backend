@@ -16,8 +16,8 @@ describe('OperationCalculatedEvent', () => {
     const event = new OperationCalculatedEvent(message);
 
     expect(event).toBeDefined();
-    expect(event.getName()).toBe(EventName.OPERATION_CALCULATED);
-    expect(event.getPayload()).toEqual(message);
-    expect(event.getDateTime()).toBeDefined();
+    expect(event.name).toBe(EventName.OPERATION_CALCULATED);
+    expect(event.payload).toEqual(message);
+    expect(event.dateTime).toBeDefined();
   });
 });
