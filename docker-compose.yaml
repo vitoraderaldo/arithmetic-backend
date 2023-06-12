@@ -13,9 +13,9 @@ services:
       - ./.docker/mysql:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 10s
-      retries: 10
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
   zookeeper:
     platform: linux/amd64
@@ -32,8 +32,8 @@ services:
     healthcheck:
       test: nc -z localhost 2181 || exit 1
       interval: 10s
-      timeout: 10s
-      retries: 10
+      timeout: 2s
+      retries: 30
       start_period: 10s
 
   kafka:
@@ -61,9 +61,9 @@ services:
       CONFLUENT_METRICS_ENABLE: 'false'
     healthcheck:
       test: nc -z localhost 9092 || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      interval: 7s
+      timeout: 2s
+      retries: 30
       start_period: 10s
 
   control-center:
@@ -84,9 +84,9 @@ services:
       PORT: 9021
     healthcheck:
       test: nc -z localhost 9021 || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      interval: 5s
+      timeout: 2s
+      retries: 20
       start_period: 10s
 
   configure-kafka:
@@ -118,6 +118,12 @@ services:
         condition: service_healthy
     ports:
       - "7001:7001"
+    healthcheck:
+      test: nc -z localhost 7001 || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      start_period: 20s
 
   run-migrations:
     build:
