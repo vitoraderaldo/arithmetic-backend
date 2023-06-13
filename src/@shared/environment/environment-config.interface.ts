@@ -21,8 +21,17 @@ export interface KafkaConfig {
   };
 }
 
+export interface ElasticApmConfig {
+  enabled: boolean;
+  secretToken: string;
+  apiKey: string;
+  serverUrl: string;
+  environment: string;
+}
+
 export interface EnvironmentConfigInterface {
   getCognito(): CognitoEnvConfig;
   getDatabase(): DatabaseConfig;
   getKafka(): KafkaConfig;
+  getElasticApm(): ElasticApmConfig;
 }
