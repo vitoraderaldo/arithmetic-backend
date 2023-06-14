@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   CognitoEnvConfig,
   DatabaseConfig,
+  ElasticApmConfig,
   EnvironmentConfigInterface,
   KafkaConfig,
 } from '../../@shared/environment/environment-config.interface';
@@ -35,6 +36,18 @@ export class NestConfigService implements EnvironmentConfigInterface {
         username: this.nestConfig.get('KAFKA_USERNAME'),
         password: this.nestConfig.get('KAFKA_PASSWORD'),
       },
+    };
+  }
+
+  getElasticApm(): ElasticApmConfig {
+    return {
+      enabled:
+        this.nestConfig.get<string>('ELASTIC_APM_ENABLED')?.toLowerCase() ===
+        'true',
+      secretToken: this.nestConfig.get('ELASTIC_APM_SECRET_TOKEN'),
+      apiKey: this.nestConfig.get('ELASTIC_APM_API_KEY'),
+      serverUrl: this.nestConfig.get('ELASTIC_APM_SERVER_URL'),
+      environment: this.nestConfig.get('ENV'),
     };
   }
 }
