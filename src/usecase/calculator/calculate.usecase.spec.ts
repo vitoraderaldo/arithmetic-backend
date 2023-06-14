@@ -10,6 +10,7 @@ import { Operation } from '../../domain/calculator/entity/operation';
 import { RecordRepositoryInterface } from '../../domain/record/repository/record-repository.interface';
 import { BalanceError } from '../../domain/user/error/balance.error';
 import { EventDispatcherInterface } from 'arithmetic-packages';
+import { LoggerFactory } from '../../infra/logger/logger-factory';
 
 jest.mock('typeorm-transactional', () => ({
   Transactional: () => () => ({}),
@@ -36,6 +37,7 @@ describe('Calculate Use Case', () => {
       operationRepository,
       recordRepository,
       eventDispatcherInterface,
+      LoggerFactory.create(),
     );
   });
 

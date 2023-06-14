@@ -9,6 +9,7 @@ import { Operation } from '../../domain/calculator/entity/operation';
 import { Transactional } from '../../@shared/database/transactional.decorator';
 import { EventDispatcherInterface, EventName } from 'arithmetic-packages';
 import { OperationCalculatedEvent } from '../../domain/calculator/event/operation-calculated.event';
+import { LoggerInterface } from '../../@shared/logger/logger.interface';
 
 export class CalculateUseCase {
   constructor(
@@ -17,10 +18,12 @@ export class CalculateUseCase {
     private readonly operationRepository: OperationRepositoryInterface,
     private readonly recordRepository: RecordRepositoryInterface,
     private readonly eventDispatcherInterface: EventDispatcherInterface,
+    private readonly logger: LoggerInterface,
   ) {}
 
   @Transactional()
   public async execute(input: CalculateInputDto): Promise<CalculateOutputDto> {
+    this.logger.info('Starting process to calculate operation', input);
     const [user, operation] = await this.getUserAndOperation(input);
     const result = await this.updateUserBalanceAndPerformCalculation(
       user,
@@ -28,7 +31,8 @@ export class CalculateUseCase {
       input,
     );
     await this.saveOperationRecord(user, operation, result);
-    this.publishOperationCalculatedEvent(user, input, result.toString());
+    await this.publishOperationCalculatedEvent(user, input, result.toString());
+    this.logger.info('Finished process to calculate operation');
     return {
       result,
       finalBalance: Number(user.getCurrentBalance().toFixed(2)),
@@ -73,6 +77,7 @@ export class CalculateUseCase {
     input: CalculateInputDto,
     result: string,
   ) {
+    this.logger.info('Publishing OPERATION_CALCULATED event');
     const event = new OperationCalculatedEvent({
       eventName: EventName.OPERATION_CALCULATED,
       data: {
@@ -82,6 +87,7 @@ export class CalculateUseCase {
         result,
       },
     });
-    this.eventDispatcherInterface.dispatch(event);
+    await this.eventDispatcherInterface.dispatch(event);
+    this.logger.info('Published OPERATION_CALCULATED event');
   }
 }
