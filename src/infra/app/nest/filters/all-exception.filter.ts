@@ -7,6 +7,7 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
+import apm from 'elastic-apm-node';
 import { DefaultError } from '../../../../@shared/error/default.error';
 import { LoggerInterface } from '../../../../@shared/logger/logger.interface';
 
@@ -47,7 +48,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       message = stringifyError(exception.getResponse()['message']);
     }
 
-    this.logger.error('Error', exception);
+    this.logger.error('Error: ', exception);
+    apm.captureError(exception);
 
     response.status(statusCode).json({
       statusCode,
