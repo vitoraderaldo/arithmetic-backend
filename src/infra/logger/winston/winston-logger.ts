@@ -9,6 +9,11 @@ export class WinstonLogger implements LoggerInterface {
     this.logger = winstonLogger;
   }
 
+  log(level: string, msg: string, metadata?: object): LoggerInterface {
+    this.logger.log(level, msg, metadata);
+    return this;
+  }
+
   error(msg: string, metadata: object): LoggerInterface {
     this.logger.error(msg, metadata);
     return this;

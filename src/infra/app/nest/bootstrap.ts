@@ -7,6 +7,7 @@ import { ConfModule } from './config.module';
 import { EnvironmentConfigInterface } from '../../../@shared/environment/environment-config.interface';
 import { startApmAgent } from '../elastic-apm/elastic-apm';
 import { LoggerInterface } from '../../../@shared/logger/logger.interface';
+import { NestJsLoggerAdapter } from '../../logger/adapters/nestjs-logger-adapter';
 
 export const bootstrap = async (): Promise<void> => {
   // Apm
@@ -21,9 +22,11 @@ export const bootstrap = async (): Promise<void> => {
   initializeTransactionalContext();
 
   const app = await NestFactory.create(AppModule);
+  const logger = app.get<LoggerInterface>('LoggerInterface');
+
+  app.useLogger(new NestJsLoggerAdapter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  const logger = app.get<LoggerInterface>('LoggerInterface');
   app.useGlobalFilters(new AllExceptionsFilter(logger));
   app.enableCors();
   await app.listen(7001);
