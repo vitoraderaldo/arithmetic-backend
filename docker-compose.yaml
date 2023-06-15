@@ -128,6 +128,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ../shared-volume/calculator/log:/app/.logs
     depends_on:
       db:
         condition: service_healthy

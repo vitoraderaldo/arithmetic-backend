@@ -1,5 +1,6 @@
-import { Kafka, KafkaConfig } from 'kafkajs';
+import { Kafka, KafkaConfig, logLevel as KafkaLogLevel } from 'kafkajs';
 import { KafkaClient } from './kafka-client.interface';
+import { KafkaLogAdapter } from '../logger/adapters/kafka-logger-adapter';
 
 export class KafkaJSClient implements KafkaClient {
   private kafka: Kafka;
@@ -15,6 +16,8 @@ export class KafkaJSClient implements KafkaClient {
     const config: KafkaConfig = {
       clientId: this.clientId,
       brokers: this.brokers,
+      logLevel: KafkaLogLevel.ERROR,
+      logCreator: KafkaLogAdapter,
     };
     if (this.credentials.username) {
       config.ssl = true;

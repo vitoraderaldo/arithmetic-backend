@@ -29,6 +29,8 @@ import { EventDispatcherInterface } from 'arithmetic-packages';
 import { KafkaJSClient } from '../../event/kafkajs-client';
 import { KafkaPublisherHandler } from '../../event/kafka-publisher.handler';
 import { KafkaClient } from '../../event/kafka-client.interface';
+import { LoggerFactory } from '../../logger/logger-factory';
+import { LoggerInterface } from '../../../@shared/logger/logger.interface';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -39,6 +41,11 @@ import { KafkaClient } from '../../event/kafka-client.interface';
     RecordsController,
   ],
   providers: [
+    {
+      provide: 'LoggerInterface',
+      useFactory: () => LoggerFactory.create(),
+      inject: [],
+    },
     {
       provide: KafkaJSClient,
       useFactory: (environmentConfig: EnvironmentConfigInterface) => {
@@ -115,6 +122,7 @@ import { KafkaClient } from '../../event/kafka-client.interface';
         operationRepository: OperationRepository,
         recordRepository: RecordRepository,
         eventDispatcher: EventDispatcherInterface,
+        logger: LoggerInterface,
       ) =>
         new CalculateUseCase(
           calculatorStrategy,
@@ -122,6 +130,7 @@ import { KafkaClient } from '../../event/kafka-client.interface';
           operationRepository,
           recordRepository,
           eventDispatcher,
+          logger,
         ),
       inject: [
         CalculatorStrategy,
@@ -129,6 +138,7 @@ import { KafkaClient } from '../../event/kafka-client.interface';
         OperationRepository,
         RecordRepository,
         'EventDispatcherInterface',
+        'LoggerInterface',
       ],
     },
     {

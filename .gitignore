@@ -42,3 +42,4 @@ k8s/**/*-env.yaml
 !k8s/**/*-dev-env.yaml
 
 .docker
+.logs
