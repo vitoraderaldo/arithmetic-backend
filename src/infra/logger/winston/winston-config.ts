@@ -2,7 +2,7 @@ import { createLogger, format, transports } from 'winston';
 import apm from 'elastic-apm-node';
 
 export const winstonLogger = createLogger({
-  level: 'debug',
+  level: 'info',
   format: format.combine(
     format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
