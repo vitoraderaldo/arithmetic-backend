@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: arithmetic-backend
-          image: "vitor96k/arithmetic-backend:5.0.2"
+          image: "vitor96k/arithmetic-backend:5.0.3"
           resources:
             requests:
               cpu: 100m
