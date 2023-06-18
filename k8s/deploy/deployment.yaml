@@ -17,6 +17,10 @@ spec:
       containers:
         - name: arithmetic-backend
           image: "vitor96k/arithmetic-backend:5.0.3"
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /app/.logs/
+              subPath: calculator/log/
           resources:
             requests:
               cpu: 100m
@@ -28,3 +32,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: arithmetic-backend-staging-env
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: logs-volume-claim
