@@ -31,7 +31,7 @@ export class CalculateUseCase {
       input,
     );
     await this.saveOperationRecord(user, operation, result);
-    await this.publishOperationCalculatedEvent(user, input, result.toString());
+    this.publishOperationCalculatedEvent(user, input, result.toString());
     this.logger.info('Finished process to calculate operation');
     return {
       result,
@@ -72,12 +72,12 @@ export class CalculateUseCase {
     await this.recordRepository.create(record);
   }
 
-  private async publishOperationCalculatedEvent(
+  private publishOperationCalculatedEvent(
     user: User,
     input: CalculateInputDto,
     result: string,
   ) {
-    this.logger.info('Publishing OPERATION_CALCULATED event');
+    this.logger.info('Dispatching OPERATION_CALCULATED event');
     const event = new OperationCalculatedEvent({
       eventName: EventName.OPERATION_CALCULATED,
       data: {
@@ -87,7 +87,6 @@ export class CalculateUseCase {
         result,
       },
     });
-    await this.eventDispatcherInterface.dispatch(event);
-    this.logger.info('Published OPERATION_CALCULATED event');
+    this.eventDispatcherInterface.dispatch(event);
   }
 }
