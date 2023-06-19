@@ -23,7 +23,6 @@ export interface KafkaConfig {
 
 export interface ElasticApmConfig {
   enabled: boolean;
-  secretToken: string;
   apiKey: string;
   serverUrl: string;
   environment: string;

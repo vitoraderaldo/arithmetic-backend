@@ -4,9 +4,7 @@ import apm from 'elastic-apm-node';
 export const winstonLogger = createLogger({
   level: 'info',
   format: format.combine(
-    format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
-    }),
+    format.timestamp(),
     format.metadata({ fillExcept: ['message', 'level', 'timestamp'] }),
     format((info) => {
       if (apm?.isStarted && apm?.currentTransaction) {
@@ -33,4 +31,3 @@ export const winstonLogger = createLogger({
     }),
   ],
 });
-
