@@ -4,9 +4,7 @@ import apm from 'elastic-apm-node';
 export const winstonLogger = createLogger({
   level: 'info',
   format: format.combine(
-    format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
-    }),
+    format.timestamp(),
     format.metadata({ fillExcept: ['message', 'level', 'timestamp'] }),
     format((info) => {
       if (apm?.isStarted && apm?.currentTransaction) {
@@ -28,13 +26,9 @@ export const winstonLogger = createLogger({
   ),
   transports: [
     new transports.File({ filename: '.logs/arithmetic-calculator.log' }),
-  ],
-});
-
-if (process.env.NODE_ENV !== 'production') {
-  winstonLogger.add(
     new transports.Console({
       format: format.combine(format.colorize(), format.simple()),
     }),
-  );
-}
+  ],
+});
+

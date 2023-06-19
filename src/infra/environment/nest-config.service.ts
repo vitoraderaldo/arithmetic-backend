@@ -44,7 +44,6 @@ export class NestConfigService implements EnvironmentConfigInterface {
       enabled:
         this.nestConfig.get<string>('ELASTIC_APM_ENABLED')?.toLowerCase() ===
         'true',
-      secretToken: this.nestConfig.get('ELASTIC_APM_SECRET_TOKEN'),
       apiKey: this.nestConfig.get('ELASTIC_APM_API_KEY'),
       serverUrl: this.nestConfig.get('ELASTIC_APM_SERVER_URL'),
       environment: this.nestConfig.get('ENV'),

@@ -13,6 +13,7 @@ export const startApmAgent = (config: ElasticApmConfig) => {
       serverUrl: config.serverUrl,
       serviceVersion: '',
       environment: config.environment,
+      apiKey: config.apiKey,
       useElasticTraceparentHeader: true,
       logger: new ElasticApmLoggerAdapter(),
       logLevel: 'error',
