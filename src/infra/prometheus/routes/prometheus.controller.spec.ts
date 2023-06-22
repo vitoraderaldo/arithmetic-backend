@@ -3,12 +3,14 @@ import { createMock } from '@golevelup/ts-jest';
 import { PrometheusController } from './prometheus.controller';
 import { GetRecordMetricsUseCase } from '../../../usecase/record/get-record-metrics.usecase';
 import { RecordsMetricsPresenter } from './presenters/records-metrics.presenter';
+import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-nodejs-metrics.usecase';
 
 describe('PrometheusController', () => {
   let controller: PrometheusController;
 
   let getRecordMetricsUseCase: GetRecordMetricsUseCase;
   let recordsMetricsPresenter: RecordsMetricsPresenter;
+  let getNodeJsMetricsUseCase: GetNodeJsMetricsUseCase;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,6 +24,10 @@ describe('PrometheusController', () => {
           provide: RecordsMetricsPresenter,
           useValue: createMock<RecordsMetricsPresenter>(),
         },
+        {
+          provide: GetNodeJsMetricsUseCase,
+          useValue: createMock<GetNodeJsMetricsUseCase>(),
+        },
       ],
     }).compile();
 
@@ -31,6 +37,9 @@ describe('PrometheusController', () => {
     );
     recordsMetricsPresenter = module.get<RecordsMetricsPresenter>(
       RecordsMetricsPresenter,
+    );
+    getNodeJsMetricsUseCase = module.get<GetNodeJsMetricsUseCase>(
+      GetNodeJsMetricsUseCase,
     );
   });
 
