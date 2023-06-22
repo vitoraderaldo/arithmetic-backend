@@ -19,3 +19,10 @@ export interface RecordSearchRepositoryDto {
     order: 'asc' | 'desc';
   };
 }
+
+export interface RecordMetrics {
+  operationId: number;
+  operationName: string;
+  totalAmount: number;
+  totalDeletedAmount: number;
+}

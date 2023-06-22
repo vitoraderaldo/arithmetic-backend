@@ -5,7 +5,10 @@ import { RecordRepositoryInterface } from '../../../domain/record/repository/rec
 import { RecordModel } from './record.model';
 import { Record } from '../../../domain/record/entity/record';
 import { PaginatedResult } from '../../../@shared/database/paginated-result';
-import { RecordSearchRepositoryDto } from '../../../domain/record/repository/repository.dto';
+import {
+  RecordMetrics,
+  RecordSearchRepositoryDto,
+} from '../../../domain/record/repository/repository.dto';
 import { RecordNotFound } from '../../../domain/record/error/record-not-found';
 
 @Injectable()
@@ -61,6 +64,27 @@ export class RecordRepository implements RecordRepositoryInterface {
       data: data?.map(this.mapRecordModelToEntity),
       total,
     };
+  }
+
+  async getMetrics(): Promise<RecordMetrics[]> {
+    const data = await this.repo
+      .createQueryBuilder('r')
+      .select('r.operationId', 'operationId')
+      .addSelect('o.name', 'operationName')
+      .addSelect('count(r.id)', 'totalAmount')
+      .addSelect('sum(r.deleted)', 'totalDeletedAmount')
+      .leftJoin('operation', 'o', 'o.id = r.operationId')
+      .groupBy('r.operationId')
+      .getRawMany();
+
+    return data.map((item) => ({
+      operationId: item.operationId,
+      operationName: item.operationName,
+      totalAmount: item.totalAmount ? parseInt(item.totalAmount) : 0,
+      totalDeletedAmount: item.totalDeletedAmount
+        ? parseInt(item.totalDeletedAmount)
+        : 0,
+    }));
   }
 
   private mapRecordModelToEntity(model: RecordModel): Record {
