@@ -7,6 +7,7 @@ import { RecordsMetricsPresenter } from './presenters/records-metrics.presenter'
 import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-nodejs-metrics.usecase';
 import { GetRecordMetricsOutputDto } from '../../../usecase/record/dto/record-metrics.dto';
 import { NodeJsMetricsOutputDto } from '../../../usecase/technical-metrics/dto/node-js-metrics.dto';
+import { GetTechnicalMetricsUseCase } from '../../../usecase/technical-metrics/get-technical-metrics.usecase';
 
 describe('PrometheusController', () => {
   let controller: PrometheusController;
@@ -14,6 +15,7 @@ describe('PrometheusController', () => {
   let getRecordMetricsUseCase: GetRecordMetricsUseCase;
   let recordsMetricsPresenter: RecordsMetricsPresenter;
   let getNodeJsMetricsUseCase: GetNodeJsMetricsUseCase;
+  let getTechnicalMetricsUseCase: GetTechnicalMetricsUseCase;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,6 +33,10 @@ describe('PrometheusController', () => {
           provide: GetNodeJsMetricsUseCase,
           useValue: createMock<GetNodeJsMetricsUseCase>(),
         },
+        {
+          provide: GetTechnicalMetricsUseCase,
+          useValue: createMock<GetTechnicalMetricsUseCase>(),
+        },
       ],
     }).compile();
 
@@ -43,6 +49,9 @@ describe('PrometheusController', () => {
     );
     getNodeJsMetricsUseCase = module.get<GetNodeJsMetricsUseCase>(
       GetNodeJsMetricsUseCase,
+    );
+    getTechnicalMetricsUseCase = module.get<GetTechnicalMetricsUseCase>(
+      GetTechnicalMetricsUseCase,
     );
   });
 
@@ -101,6 +110,32 @@ describe('PrometheusController', () => {
     const expressResponse = createMock<Response>();
 
     await controller.getNodeMetrics(expressResponse);
+    expressResponse.format.mock.calls[0][0].default();
+
+    const contentType = expressResponse.set.mock.calls[0][1];
+    const body = expressResponse.send.mock.calls[0][0];
+
+    expect(contentType).toEqual(prometheusMetrics.contentType);
+    expect(body).toEqual(prometheusMetrics.metrics);
+
+    expect(executeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('must get technical metrics', async () => {
+    const metrics = 'technical-metrics';
+
+    const prometheusMetrics: NodeJsMetricsOutputDto = {
+      metrics,
+      contentType: 'application/text',
+    };
+
+    const executeSpy = jest
+      .spyOn(getTechnicalMetricsUseCase, 'execute')
+      .mockResolvedValueOnce(prometheusMetrics);
+
+    const expressResponse = createMock<Response>();
+
+    await controller.getTechnicalMetrics(expressResponse);
     expressResponse.format.mock.calls[0][0].default();
 
     const contentType = expressResponse.set.mock.calls[0][1];

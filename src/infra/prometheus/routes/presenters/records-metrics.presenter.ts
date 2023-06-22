@@ -18,6 +18,14 @@ export class RecordsMetricsPresenter {
         registerName: PromRegisterName.BUSINESS,
       });
     });
+    data.metrics.deletedRecords.forEach((deletedRecord) => {
+      this.promClient.setGaugeValueAndLabel({
+        metricName: PromMetricNameEnum.DELETED_RECORDS_TOTAL,
+        labels: { operation: deletedRecord.operationName },
+        value: deletedRecord.total,
+        registerName: PromRegisterName.BUSINESS,
+      });
+    });
     const body = await this.promClient.getMetrics(PromRegisterName.BUSINESS);
     const contentType = this.promClient.getContentType();
     return { body, contentType };

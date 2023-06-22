@@ -12,8 +12,14 @@ export interface PromMetricCreationPayload {
 export interface UpdateMetricPayload {
   registerName: PromRegisterName;
   metricName: PromMetricNameEnum;
-  labels: Record<PromMetricLabelEnum, string>;
+  labels: Partial<Record<PromMetricLabelEnum, string>>;
   value: number;
+}
+
+export interface StartTimerPayload {
+  registerName: PromRegisterName;
+  metricName: PromMetricNameEnum;
+  labels: Partial<Record<PromMetricLabelEnum, string>>;
 }
 
 export interface GaugeInterface {

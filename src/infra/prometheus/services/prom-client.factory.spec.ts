@@ -9,10 +9,15 @@ describe('PromClientFactory', () => {
 
     const contentType = client.getContentType();
     const businessMetrics = await client.getMetrics(PromRegisterName.BUSINESS);
+    const technicalMetrics = await client.getMetrics(
+      PromRegisterName.TECHNICAL,
+    );
     const nodeJsMetrics = await client.getMetrics(PromRegisterName.NODEJS);
 
     expect(nodeJsMetrics).toContain('nodejs_heap_size_total_bytes');
     expect(businessMetrics).toContain('app_calculator_calculation_total');
+    expect(businessMetrics).toContain('app_calculator_deleted_records_total');
+    expect(technicalMetrics).toContain('app_calculator_request_time_duration');
     expect(contentType).toEqual('text/plain; version=0.0.4; charset=utf-8');
   });
 });

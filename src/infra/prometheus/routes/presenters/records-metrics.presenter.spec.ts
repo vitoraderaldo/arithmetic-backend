@@ -48,11 +48,17 @@ describe('RecordsMetricsPresenter', () => {
       contentType: prometheusContentType,
     });
 
-    expect(setGaugeSpy).toHaveBeenCalledTimes(2);
+    expect(setGaugeSpy).toHaveBeenCalledTimes(4);
     expect(setGaugeSpy).toHaveBeenNthCalledWith(1, {
       metricName: 'app_calculator_calculation_total',
       labels: { operation: 'Multiplication' },
       value: 10,
+      registerName: 'business',
+    });
+    expect(setGaugeSpy).toHaveBeenNthCalledWith(3, {
+      metricName: 'app_calculator_deleted_records_total',
+      labels: { operation: 'Multiplication' },
+      value: 2,
       registerName: 'business',
     });
     expect(getMetricsSpy).toHaveBeenCalledWith('business');

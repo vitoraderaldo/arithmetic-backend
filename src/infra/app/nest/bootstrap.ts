@@ -8,6 +8,7 @@ import { EnvironmentConfigInterface } from '../../../@shared/environment/environ
 import { startApmAgent } from '../elastic-apm/elastic-apm';
 import { LoggerInterface } from '../../../@shared/logger/logger.interface';
 import { NestJsLoggerAdapter } from '../../logger/adapters/nestjs-logger-adapter';
+import { RequestTimeInterceptor } from './interceptors/request-timing.interceptor';
 
 export const bootstrap = async (): Promise<void> => {
   // Apm
@@ -23,9 +24,11 @@ export const bootstrap = async (): Promise<void> => {
 
   const app = await NestFactory.create(AppModule);
   const logger = app.get<LoggerInterface>('LoggerInterface');
+  const requestTimeInterceptor = app.get(RequestTimeInterceptor);
 
   app.useLogger(new NestJsLoggerAdapter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalInterceptors(requestTimeInterceptor);
 
   app.useGlobalFilters(new AllExceptionsFilter(logger));
   app.enableCors();

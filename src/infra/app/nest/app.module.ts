@@ -38,6 +38,8 @@ import { PromClientFactory } from '../../prometheus/services/prom-client.factory
 import { RecordsMetricsPresenter } from '../../prometheus/routes/presenters/records-metrics.presenter';
 import { PromClientInterface } from '../../prometheus/interfaces/metrics/prom-client.interface';
 import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-nodejs-metrics.usecase';
+import { RequestTimeInterceptor } from './interceptors/request-timing.interceptor';
+import { GetTechnicalMetricsUseCase } from '../../../usecase/technical-metrics/get-technical-metrics.usecase';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -60,6 +62,12 @@ import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-
       inject: [],
     },
     {
+      provide: RequestTimeInterceptor,
+      useFactory: (promClient: PromClientInterface) =>
+        new RequestTimeInterceptor(promClient),
+      inject: ['PromClientInterface'],
+    },
+    {
       provide: RecordsMetricsPresenter,
       useFactory: (promClient: PromClientInterface) =>
         new RecordsMetricsPresenter(promClient),
@@ -69,6 +77,12 @@ import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-
       provide: GetNodeJsMetricsUseCase,
       useFactory: (promClient: PromClientInterface) =>
         new GetNodeJsMetricsUseCase(promClient),
+      inject: ['PromClientInterface'],
+    },
+    {
+      provide: GetTechnicalMetricsUseCase,
+      useFactory: (promClient: PromClientInterface) =>
+        new GetTechnicalMetricsUseCase(promClient),
       inject: ['PromClientInterface'],
     },
     {

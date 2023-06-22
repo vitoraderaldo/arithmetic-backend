@@ -1,15 +1,15 @@
 import { createMock } from '@golevelup/ts-jest';
 import { PromClientInterface } from '../../infra/prometheus/interfaces/metrics/prom-client.interface';
-import { GetNodeJsMetricsUseCase } from './get-nodejs-metrics.usecase';
+import { GetTechnicalMetricsUseCase } from './get-technical-metrics.usecase';
 import { PromRegisterName } from '../../infra/prometheus/interfaces/metrics/prom-registry-name';
 
-describe('GetNodeJsMetricsUseCase', () => {
+describe('GetTechnicalMetricsUseCase', () => {
   let promClient: PromClientInterface;
-  let useCase: GetNodeJsMetricsUseCase;
+  let useCase: GetTechnicalMetricsUseCase;
 
   beforeEach(() => {
     promClient = createMock<PromClientInterface>();
-    useCase = new GetNodeJsMetricsUseCase(promClient);
+    useCase = new GetTechnicalMetricsUseCase(promClient);
   });
 
   afterEach(() => {
@@ -17,8 +17,8 @@ describe('GetNodeJsMetricsUseCase', () => {
     jest.resetAllMocks();
   });
 
-  it('must return nodejs metrics', async () => {
-    const metrics = 'node-js-metric-in-text';
+  it('must return technical metrics', async () => {
+    const metrics = 'technical-metrics-in-text';
     const contentType = 'application/text';
 
     const getMetricsSpy = jest
@@ -29,6 +29,6 @@ describe('GetNodeJsMetricsUseCase', () => {
 
     const response = await useCase.execute();
     expect(response).toEqual({ metrics, contentType });
-    expect(getMetricsSpy).toHaveBeenCalledWith(PromRegisterName.NODEJS);
+    expect(getMetricsSpy).toHaveBeenCalledWith(PromRegisterName.TECHNICAL);
   });
 });
