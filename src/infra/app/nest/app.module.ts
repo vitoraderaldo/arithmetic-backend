@@ -37,6 +37,7 @@ import { RecordRepositoryInterface } from '../../../domain/record/repository/rec
 import { PromClientFactory } from '../../prometheus/services/prom-client.factory';
 import { RecordsMetricsPresenter } from '../../prometheus/routes/presenters/records-metrics.presenter';
 import { PromClientInterface } from '../../prometheus/interfaces/metrics/prom-client.interface';
+import { GetNodeJsMetricsUseCase } from '../../../usecase/technical-metrics/get-nodejs-metrics.usecase';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -62,6 +63,12 @@ import { PromClientInterface } from '../../prometheus/interfaces/metrics/prom-cl
       provide: RecordsMetricsPresenter,
       useFactory: (promClient: PromClientInterface) =>
         new RecordsMetricsPresenter(promClient),
+      inject: ['PromClientInterface'],
+    },
+    {
+      provide: GetNodeJsMetricsUseCase,
+      useFactory: (promClient: PromClientInterface) =>
+        new GetNodeJsMetricsUseCase(promClient),
       inject: ['PromClientInterface'],
     },
     {
