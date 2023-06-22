@@ -31,6 +31,12 @@ import { KafkaPublisherHandler } from '../../event/kafka-publisher.handler';
 import { KafkaClient } from '../../event/kafka-client.interface';
 import { LoggerFactory } from '../../logger/logger-factory';
 import { LoggerInterface } from '../../../@shared/logger/logger.interface';
+import { PrometheusController } from '../../prometheus/routes/prometheus.controller';
+import { GetRecordMetricsUseCase } from '../../../usecase/record/get-record-metrics.usecase';
+import { RecordRepositoryInterface } from '../../../domain/record/repository/record-repository.interface';
+import { PromClientFactory } from '../../prometheus/services/prom-client.factory';
+import { RecordsMetricsPresenter } from '../../prometheus/routes/presenters/records-metrics.presenter';
+import { PromClientInterface } from '../../prometheus/interfaces/metrics/prom-client.interface';
 
 @Module({
   imports: [ConfModule, DatabaseModule],
@@ -39,12 +45,29 @@ import { LoggerInterface } from '../../../@shared/logger/logger.interface';
     CalculatorController,
     HealthCheckController,
     RecordsController,
+    PrometheusController,
   ],
   providers: [
     {
       provide: 'LoggerInterface',
       useFactory: () => LoggerFactory.create(),
       inject: [],
+    },
+    {
+      provide: 'PromClientInterface',
+      useFactory: () => PromClientFactory.create(),
+      inject: [],
+    },
+    {
+      provide: RecordsMetricsPresenter,
+      useFactory: (promClient: PromClientInterface) =>
+        new RecordsMetricsPresenter(promClient),
+      inject: ['PromClientInterface'],
+    },
+    {
+      provide: 'RecordRepositoryInterface',
+      useFactory: (recordRepository: RecordRepository) => recordRepository,
+      inject: [RecordRepository],
     },
     {
       provide: KafkaJSClient,
@@ -120,7 +143,7 @@ import { LoggerInterface } from '../../../@shared/logger/logger.interface';
         calculatorStrategy: CalculatorStrategy,
         userRepository: UserRepository,
         operationRepository: OperationRepository,
-        recordRepository: RecordRepository,
+        recordRepository: RecordRepositoryInterface,
         eventDispatcher: EventDispatcherInterface,
         logger: LoggerInterface,
       ) =>
@@ -136,7 +159,7 @@ import { LoggerInterface } from '../../../@shared/logger/logger.interface';
         CalculatorStrategy,
         UserRepository,
         OperationRepository,
-        RecordRepository,
+        'RecordRepositoryInterface',
         'EventDispatcherInterface',
         'LoggerInterface',
       ],
@@ -158,7 +181,7 @@ import { LoggerInterface } from '../../../@shared/logger/logger.interface';
     {
       provide: SearchRecordsUseCase,
       useFactory: (
-        recordRepository: RecordRepository,
+        recordRepository: RecordRepositoryInterface,
         userRepository: UserRepository,
         operationRepository: OperationRepository,
       ) =>
@@ -167,15 +190,25 @@ import { LoggerInterface } from '../../../@shared/logger/logger.interface';
           userRepository,
           operationRepository,
         ),
-      inject: [RecordRepository, UserRepository, OperationRepository],
+      inject: [
+        'RecordRepositoryInterface',
+        UserRepository,
+        OperationRepository,
+      ],
     },
     {
       provide: DeleteRecordUseCase,
       useFactory: (
-        recordRepository: RecordRepository,
+        recordRepository: RecordRepositoryInterface,
         userRepository: UserRepository,
       ) => new DeleteRecordUseCase(recordRepository, userRepository),
-      inject: [RecordRepository, UserRepository],
+      inject: ['RecordRepositoryInterface', UserRepository],
+    },
+    {
+      provide: GetRecordMetricsUseCase,
+      useFactory: (recordRepository: RecordRepositoryInterface) =>
+        new GetRecordMetricsUseCase(recordRepository),
+      inject: ['RecordRepositoryInterface'],
     },
   ],
 })
