@@ -14,8 +14,8 @@ exports.up = function(knex) {
         operation_response VARCHAR(255) NOT NULL,
         date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
-        FOREIGN KEY (operation_id) REFERENCES operation(id),
-        FOREIGN KEY (user_id) REFERENCES user(id)
+        INDEX idx_record_operation_id (operation_id),
+        INDEX idx_record_user_id (user_id)
       );
     `).transacting(trx)
 

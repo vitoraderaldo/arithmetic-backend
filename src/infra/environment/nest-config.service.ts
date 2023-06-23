@@ -25,6 +25,8 @@ export class NestConfigService implements EnvironmentConfigInterface {
       username: this.nestConfig.get('DATABASE_USERNAME'),
       password: this.nestConfig.get('DATABASE_PASSWORD'),
       database: this.nestConfig.get('DATABASE_NAME'),
+      rejectUnauthorized:
+        this.nestConfig.get('DATABASE_SSL_REJECT_UNAUTHORIZED') === 'true',
     };
   }
 

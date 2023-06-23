@@ -19,7 +19,14 @@ import { RecordRepository } from '../../record/repository/record-repository';
       useFactory: (environmentConfigInterface: EnvironmentConfigInterface) => {
         const database = environmentConfigInterface.getDatabase();
         return {
-          ...database,
+          host: database.host,
+          port: database.port,
+          username: database.username,
+          password: database.password,
+          database: database.database,
+          ssl: {
+            rejectUnauthorized: database.rejectUnauthorized,
+          },
           type: 'mysql',
           autoLoadEntities: true,
           synchronize: false,
