@@ -19,4 +19,5 @@ install_dns_creation:
   --set rbac.create=true
 
 deploy:
+	kubectl apply -f ../deploy/secrets
 	kubectl apply -f ../deploy

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: arithmetic-backend
-          image: "vitor96k/arithmetic-backend:5.0.5"
+          image: "vitor96k/arithmetic-backend:5.0.6"
           volumeMounts:
             - name: logs-volume
               mountPath: /app/.logs/
