@@ -31,7 +31,7 @@ exports.up = function(knex) {
         date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
 
-        FOREIGN KEY (status_id) REFERENCES user_status(id)
+        INDEX idx_user_status_id (status_id)
     );
 
   `).transacting(trx)

@@ -10,6 +10,7 @@ export interface DatabaseConfig {
   username: string;
   password: string;
   database: string;
+  rejectUnauthorized: boolean;
 }
 
 export interface KafkaConfig {
