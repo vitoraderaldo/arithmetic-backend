@@ -1,5 +1,4 @@
 node_modules
 src/infra/environment/*.env
 
-k8s
 .docker
