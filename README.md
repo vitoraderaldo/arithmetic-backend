@@ -6,7 +6,7 @@ The backend application is utilized by the corresponding frontend project, which
 
 ## Live App
 **Staging URL**: 
-https://api-staging.arithmetic-services.click
+https://arithmetic-backend-e174ae33b1e1.herokuapp.com
 
 ## Stack
 The following technologies are employed in this project:
