@@ -10,5 +10,5 @@ export const bootstrap = async (): Promise<void> => {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new AllExceptionsFilter());
   app.enableCors();
-  await app.listen(80);
+  await app.listen(process.env.PORT || 80);
 };
