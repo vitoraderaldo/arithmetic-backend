@@ -14,8 +14,7 @@ type Props = {
     | 'subtraction'
     | 'multiplication'
     | 'division'
-    | 'squareRoot'
-    | 'randomString';
+    | 'squareRoot';
 };
 
 describe('Calculator Strategy', () => {

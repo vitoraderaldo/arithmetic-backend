@@ -11,6 +11,7 @@ import { RecordRepositoryInterface } from '../../domain/record/repository/record
 import { BalanceError } from '../../domain/user/error/balance.error';
 import { EventDispatcherInterface } from 'arithmetic-packages';
 import { LoggerFactory } from '../../infra/logger/logger-factory';
+import { InvalidArgument } from '../../domain/calculator/error/invalid-argument';
 
 jest.mock('typeorm-transactional', () => ({
   Transactional: () => () => ({}),
@@ -125,5 +126,105 @@ describe('Calculate Use Case', () => {
     expect(updateBalanceSpy).not.toHaveBeenCalled();
     expect(createRecordSpy).not.toHaveBeenCalled();
     expect(dispatchSpy).not.toHaveBeenCalled();
+  });
+
+  describe('Argument Count Validation', () => {
+    it('must calculate the operation when the correct number of arguments is provided', async () => {
+      const input: CalculateInputDto = {
+        identityProviderId: '123',
+        operationType: OperationType.ADDITION,
+        arguments: [1, 2], // Correct number of arguments
+      };
+      const result = 3;
+      const user = new User(1, 'email@email.com', 1, 100);
+      const operation = new Operation(
+        1,
+        OperationType.ADDITION,
+        'Addition',
+        10,
+        2, // Expects 2 arguments
+      );
+
+      jest
+        .spyOn(userRepository, 'findByIdentityProviderId')
+        .mockResolvedValueOnce(user);
+      jest
+        .spyOn(operationRepository, 'findByType')
+        .mockResolvedValueOnce(operation);
+      jest.spyOn(calculatorStrategy, 'calculate').mockReturnValueOnce(result);
+
+      const output = await calculateUseCase.execute(input);
+      expect(output).toEqual({ result, finalBalance: 90 });
+      expect(calculatorStrategy.calculate).toHaveBeenCalledWith(
+        OperationType.ADDITION,
+        1,
+        2,
+      );
+    });
+
+    it('must throw InvalidArgumentError when too few arguments are provided', async () => {
+      const input: CalculateInputDto = {
+        identityProviderId: '123',
+        operationType: OperationType.ADDITION,
+        arguments: [1], // Too few arguments
+      };
+      const user = new User(1, 'email@email.com', 1, 100);
+      const operation = new Operation(
+        1,
+        OperationType.ADDITION,
+        'Addition',
+        10,
+        2, // Expects 2 arguments
+      );
+
+      jest
+        .spyOn(userRepository, 'findByIdentityProviderId')
+        .mockResolvedValueOnce(user);
+      jest
+        .spyOn(operationRepository, 'findByType')
+        .mockResolvedValueOnce(operation);
+
+      await expect(calculateUseCase.execute(input)).rejects.toThrowError(
+        new InvalidArgument(
+          `Incorrect number of arguments for operation ${OperationType.ADDITION}. Expected 2, but received 1.`,
+        ),
+      );
+      expect(calculatorStrategy.calculate).not.toHaveBeenCalled();
+      expect(userRepository.updateBalance).not.toHaveBeenCalled();
+      expect(recordRepository.create).not.toHaveBeenCalled();
+    });
+
+    it('must throw InvalidArgumentError when too many arguments are provided', async () => {
+      const input: CalculateInputDto = {
+        identityProviderId: '123',
+        operationType: OperationType.SQUARE_ROOT,
+        arguments: [1, 2, 3], // Too many arguments
+      };
+      const user = new User(1, 'email@email.com', 1, 100);
+      // Square root operation typically expects 1 argument
+      const operation = new Operation(
+        1,
+        OperationType.SQUARE_ROOT,
+        'Square Root',
+        15,
+        1, // Expects 1 argument
+      );
+
+      jest
+        .spyOn(userRepository, 'findByIdentityProviderId')
+        .mockResolvedValueOnce(user);
+      jest
+        .spyOn(operationRepository, 'findByType')
+        .mockResolvedValueOnce(operation);
+
+      await expect(calculateUseCase.execute(input)).rejects.toThrowError(
+        new InvalidArgument(
+          `Incorrect number of arguments for operation ${OperationType.SQUARE_ROOT}. Expected 1, but received 3.`,
+        ),
+      );
+      expect(calculatorStrategy.calculate).not.toHaveBeenCalled();
+      expect(userRepository.updateBalance).not.toHaveBeenCalled();
+      expect(recordRepository.create).not.toHaveBeenCalled();
+    });
   });
 });

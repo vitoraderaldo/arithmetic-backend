@@ -1,13 +1,13 @@
 import { createMock } from '@golevelup/ts-jest';
-import { HtppClient } from '../../../@shared/http-client/http-client.interface';
+import { HttpClient } from '../../../@shared/http-client/http-client.interface';
 import { RandomStringOrg } from './random-string-org';
 
 describe('Random String Org', () => {
   let randomStringOrg: RandomStringOrg;
-  let httpClient: HtppClient;
+  let httpClient: HttpClient;
 
   beforeEach(() => {
-    httpClient = createMock<HtppClient>();
+    httpClient = createMock<HttpClient>();
     randomStringOrg = new RandomStringOrg(httpClient);
   });
 

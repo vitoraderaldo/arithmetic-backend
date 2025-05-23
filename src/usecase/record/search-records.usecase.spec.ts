@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { RecordRepositoryInterface } from '../../domain/record/repository/record-repository.interface';
 import { UserRepositoryInterface } from '../../domain/user/repository/user-repository.interface';
-import { SearchRecordsUseCase } from './serch-records.usecase';
+import { SearchRecordsUseCase } from './search-records.usecase';
 import { SearchRecordsInputDto } from './dto/search-records.dto';
 import { User } from '../../domain/user/entity/user';
 import { PaginatedResult } from '../../@shared/database/paginated-result';

@@ -25,7 +25,22 @@ describe('AxiosService', () => {
 
     const result = await service.get(url, headers);
 
-    expect(axios.get).toHaveBeenCalledWith(url, { headers });
+    expect(axios.get).toHaveBeenCalledWith(url, { headers, timeout: 5000 });
     expect(result).toEqual(responseData);
+  });
+
+  it('should throw an error if the GET request times out', async () => {
+    const url = 'https://example.com/api';
+    const headers = { 'Content-Type': 'application/json' };
+    const timeoutError = {
+      isAxiosError: true,
+      code: 'ECONNABORTED',
+      message: 'timeout of 5000ms exceeded',
+    };
+
+    (axios.get as jest.Mock).mockRejectedValue(timeoutError);
+
+    await expect(service.get(url, headers)).rejects.toMatchObject(timeoutError);
+    expect(axios.get).toHaveBeenCalledWith(url, { headers, timeout: 5000 });
   });
 });

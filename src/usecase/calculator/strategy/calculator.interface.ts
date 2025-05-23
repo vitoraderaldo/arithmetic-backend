@@ -4,5 +4,4 @@ export interface CalculatorInterface {
   multiplication(a: number, b: number): number;
   division(a: number, b: number): number;
   squareRoot(a: number): number;
-  randomString(): string;
 }

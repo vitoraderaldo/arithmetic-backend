@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { createMock } from '@golevelup/ts-jest';
 import { Response } from 'express';
 import { RecordsController } from './records.controller';
-import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
+import { SearchRecordsUseCase } from '../../../usecase/record/search-records.usecase';
 import { AuthGuard } from '../../guards/auth.guard';
 import {
   SearchRecordsRequest,
