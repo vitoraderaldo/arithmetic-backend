@@ -6,6 +6,7 @@ import { IdentityLoginOutputDto } from '../../domain/user/repository/identity-lo
 import { InvalidCredentials } from '../../domain/user/error/invalid-credentials.error';
 import { UserRepository } from '../../infra/user/repository/user.repository';
 import { User } from '../../domain/user/entity/user';
+import { UserNotFound } from '../../domain/user/error/user-not-found';
 
 describe('User Login', () => {
   let useCase: UserLogsInUseCase;
@@ -79,6 +80,24 @@ describe('User Login', () => {
 
     const response = useCase.execute(credentials);
     await expect(response).rejects.toThrowError('This account is not active');
+    await expect(response).rejects.toThrowError(InvalidCredentials);
+    expect(loginSpy).not.toHaveBeenCalled();
+  });
+
+  it('must throw InvalidCredentials when UserNotFound is thrown by userRepository', async () => {
+    const credentials: UserLoginInputDto = {
+      email: 'nonexistent@email.com',
+      password: '1234',
+    };
+
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockRejectedValue(new UserNotFound());
+
+    const loginSpy = jest.spyOn(identityProvider, 'login');
+
+    const response = useCase.execute(credentials);
+    await expect(response).rejects.toThrowError('Invalid credentials');
     await expect(response).rejects.toThrowError(InvalidCredentials);
     expect(loginSpy).not.toHaveBeenCalled();
   });

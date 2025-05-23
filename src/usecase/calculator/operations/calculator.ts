@@ -29,8 +29,4 @@ export class Calculator implements CalculatorInterface {
     }
     return Math.sqrt(a);
   }
-
-  public randomString(): string {
-    return 'oi';
-  }
 }

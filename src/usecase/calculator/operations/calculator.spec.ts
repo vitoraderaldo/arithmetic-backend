@@ -73,12 +73,6 @@ describe('Calculator', () => {
     expect(response).toEqual(result);
   });
 
-  it('must return a random string', () => {
-    const response = calculator.randomString();
-    expect(response).toBeDefined();
-    expect(response.length).toBeGreaterThan(1);
-  });
-
   it('must throw error when square root of negative number', () => {
     const squareRoot = () => calculator.squareRoot(-1);
     expect(squareRoot).toThrowError(InvalidArgument);

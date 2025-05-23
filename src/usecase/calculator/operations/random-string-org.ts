@@ -1,8 +1,8 @@
-import { HtppClient } from '../../../@shared/http-client/http-client.interface';
+import { HttpClient } from '../../../@shared/http-client/http-client.interface';
 import { RandomStringInterface } from '../strategy/random-string.interface';
 
 export class RandomStringOrg implements RandomStringInterface {
-  constructor(private readonly httpClient: HtppClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   private BASE_URL = 'https://random.org';
   private RANDOM_STRING_CONFIG = {

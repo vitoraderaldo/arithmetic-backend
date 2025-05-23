@@ -10,6 +10,7 @@ import { Transactional } from '../../@shared/database/transactional.decorator';
 import { EventDispatcherInterface, EventName } from 'arithmetic-packages';
 import { OperationCalculatedEvent } from '../../domain/calculator/event/operation-calculated.event';
 import { LoggerInterface } from '../../@shared/logger/logger.interface';
+import { InvalidArgument } from '../../domain/calculator/error/invalid-argument';
 
 export class CalculateUseCase {
   constructor(
@@ -54,6 +55,15 @@ export class CalculateUseCase {
     operation: Operation,
     input: CalculateInputDto,
   ): Promise<number | string> {
+    const expectedArgsCount = operation.getInputsRequired();
+    const actualArgsCount = input.arguments.length;
+
+    if (actualArgsCount !== expectedArgsCount) {
+      throw new InvalidArgument(
+        `Incorrect number of arguments for operation ${operation.getType()}. Expected ${expectedArgsCount}, but received ${actualArgsCount}.`,
+      );
+    }
+
     user.spendMoney(operation.getCost());
     const result = this.calculatorStrategy.calculate(
       operation.getType(),

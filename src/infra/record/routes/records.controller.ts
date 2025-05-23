@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
-import { SearchRecordsUseCase } from '../../../usecase/record/serch-records.usecase';
+import { SearchRecordsUseCase } from '../../../usecase/record/search-records.usecase';
 import { SearchRecordsRequest } from './requests/search-records.request';
 import { IdentityProviderId } from '../../guards/identity-provider-id.decorator';
 import { DeleteRecordUseCase } from '../../../usecase/record/delete-record.usecase';
