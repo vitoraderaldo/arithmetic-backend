@@ -27,7 +27,7 @@ describe('Operation', () => {
   it('must not create operation with invalid id, name, cost, type', () => {
     const createOperation = () => new Operation(-1, null, '', 0, 2);
     expect(createOperation).toThrowError(
-      'id must be a positive number, type must be one of the following values: ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, SQUARE_ROOT, RANDOM_STRING, name must be longer than or equal to 1 characters, cost must be a positive number',
+      'id must be a positive number, type must be one of the following values: ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, SQUARE_ROOT, RANDOM_STRING, EXPONENTIATION, MODULUS, name must be longer than or equal to 1 characters, cost must be a positive number',
     );
   });
 });
