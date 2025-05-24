@@ -21,6 +21,10 @@ export class CalculatorStrategy {
         return this.calculator.division(input[0], input[1]);
       case OperationType.SQUARE_ROOT:
         return this.calculator.squareRoot(input[0]);
+      case OperationType.EXPONENTIATION: // New case
+        return this.calculator.exponentiation(input[0], input[1]); // New case
+      case OperationType.MODULUS: // New case
+        return this.calculator.modulus(input[0], input[1]); // New case
       case OperationType.RANDOM_STRING:
         return this.randomStringService.randomString();
       default:
